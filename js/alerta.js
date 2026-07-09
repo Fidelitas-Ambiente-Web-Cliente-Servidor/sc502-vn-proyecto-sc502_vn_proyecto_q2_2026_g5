@@ -85,76 +85,62 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-const elementos = [
-    tipoInput,
-    animalInput,
-    ubicacionInput,
-    fechaInput,
-    descripcionInput
-];
+tipoInput.addEventListener("input", validarFormulario);
+    animalInput.addEventListener("input", validarFormulario);
+    ubicacionInput.addEventListener("input", validarFormulario);
+    fechaInput.addEventListener("input", validarFormulario);
+    descripcionInput.addEventListener("input", validarFormulario);
 
-elementos.forEach(function (elemento) {
-    elemento.addEventListener("input", validarFormulario);
-});
+    btnEnviar.addEventListener("click", function () {
 
+        let tarjeta = document.createElement("div");
+        tarjeta.className = "alerta";
 
-btnEnviar.addEventListener("click", function () {
+        let titulo = document.createElement("h3");
+        titulo.textContent = tipoInput.value;
 
-    const alerta = [
-        tipoInput.value,
-        animalInput.value,
-        ubicacionInput.value,
-        fechaInput.value,
-        descripcionInput.value
-    ];
+        let mascota = document.createElement("p");
+        mascota.textContent = "Animal: " + animalInput.value;
 
-    const cardBody = document.createElement("div");
-    tarjeta.classList.add("alerta");
+        let lugar = document.createElement("p");
+        lugar.textContent = "Ubicación: " + ubicacionInput.value;
 
-    const titulo = document.createElement("h3");
-    titulo.textContent = alerta[0];
+        let fecha = document.createElement("p");
+        fecha.textContent = "Fecha: " + fechaInput.value;
 
-    const animal = document.createElement("p");
-    animal.textContent = "Animal";
+        let descripcion = document.createElement("p");
+        descripcion.textContent = "Descripción: " + descripcionInput.value;
 
-    const ubicacion = document.createElement("p");
-    ubicacion.textContent = "Ubicación";
+        tarjeta.appendChild(titulo);
+        tarjeta.appendChild(mascota);
+        tarjeta.appendChild(lugar);
+        tarjeta.appendChild(fecha);
+        tarjeta.appendChild(descripcion);
 
-    const fecha = document.createElement("p");
-    fecha.textContent = "Fecha";
+        contenedorAlertas.appendChild(tarjeta);
 
-    const descripcion = document.createElement("p");
-    descripcion.textContent = "Descripción";
+        mensajeExito.innerText = "¡Reporte publicado correctamente!";
+        mensajeExito.style.color = "green";
 
-    cardBody.appendChild(titulo);
-    cardBody.appendChild(animal);
-    cardBody.appendChild(ubicacion);
-    cardBody.appendChild(fecha);
-    cardBody.appendChild(descripcion);
+        tipoInput.value = "";
+        animalInput.value = "";
+        ubicacionInput.value = "";
+        fechaInput.value = "";
+        descripcionInput.value = "";
 
-    contenedorAlertas.appendChild(cardBody);
+        errorTipo.innerText = "";
+        errorAnimal.innerText = "";
+        errorUbicacion.innerText = "";
+        errorFecha.innerText = "";
+        errorDescripcion.innerText = "";
 
-    mensajeExito.innerText = "¡Reporte publicado correctamente!";
-    mensajeExito.style.color = "green";
+        btnEnviar.disabled = true;
 
-    tipoInput.value = "";
-    animalInput.value = "";
-    ubicacionInput.value = "";
-    fechaInput.value = "";
-    descripcionInput.value = "";
+        setTimeout(function () {
+            mensajeExito.innerText = "";
+        }, 2500);
 
-    errorTipo.innerText = "";
-    errorAnimal.innerText = "";
-    errorUbicacion.innerText = "";
-    errorFecha.innerText = "";
-    errorDescripcion.innerText = "";
+    });
 
-    btnEnviar.disabled = true;
-
-    setTimeout(function () {
-        mensajeExito.innerText = "";
-    }, 2500);
-
-});
 
 });
