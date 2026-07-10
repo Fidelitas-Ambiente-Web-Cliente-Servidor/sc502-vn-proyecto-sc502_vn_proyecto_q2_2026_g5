@@ -1,0 +1,355 @@
+/* Estilos propios del módulo de Adopción, construidos sobre css/estilos.css */
+
+.vista.oculto{
+    display:none;
+}
+
+/* Panel de filtros */
+
+.panelFiltros{
+    background:white;
+    padding:30px;
+    border-radius:15px;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+    margin-bottom:30px;
+}
+
+.filtrosGrid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+    gap:20px;
+}
+
+.campoFiltro label{
+    display:block;
+    font-size:13px;
+    font-weight:600;
+    color:#0F172A;
+    margin-bottom:6px;
+}
+
+.campoFiltro input,
+.campoFiltro select{
+    width:100%;
+    padding:10px 12px;
+    border:1px solid #CBD5E1;
+    border-radius:10px;
+    font-size:14px;
+    font-family:'Poppins',sans-serif;
+}
+
+.campoAncho{
+    grid-column:span 2;
+    align-self:center;
+}
+
+.campoBoton{
+    display:flex;
+    align-items:flex-end;
+}
+
+#btnLimpiar{
+    width:100%;
+    background:white;
+    color:#0F766E;
+    border:1px solid #0F766E;
+    padding:11px 16px;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:14px;
+    transition:.3s;
+}
+
+#btnLimpiar:hover{
+    background:#0F766E;
+    color:white;
+}
+
+#resultadoConteo{
+    color:#64748B;
+    margin-bottom:20px;
+}
+
+.sinResultados{
+    text-align:center;
+    color:#94A3B8;
+    font-style:italic;
+    padding:40px 0;
+}
+
+/* Tarjetas de animales (extienden .card de estilos.css) */
+
+.cardAnimal{
+    text-align:left;
+}
+
+.cardAnimal .foto{
+    width:100%;
+    height:170px;
+    object-fit:cover;
+    border-radius:12px;
+    margin-bottom:16px;
+}
+
+.cardAnimal h3{
+    color:#0F766E;
+    margin-bottom:6px;
+}
+
+.cardAnimal .datosAnimal{
+    color:#64748B;
+    font-size:13px;
+    margin-bottom:4px;
+}
+
+.cardAnimal .estadoBadge{
+    margin:10px 0;
+}
+
+.cardAnimal button{
+    width:100%;
+}
+
+.estadoBadge{
+    display:inline-block;
+    padding:4px 12px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:600;
+}
+
+.estadoDisponible{
+    background:#DCFCE7;
+    color:#15803D;
+}
+
+.estadoProceso{
+    background:#FEF3C7;
+    color:#B45309;
+}
+
+/* Botón volver */
+
+.btnVolver{
+    background:none;
+    border:none;
+    color:#0F766E;
+    font-size:14px;
+    font-weight:600;
+    cursor:pointer;
+    margin-bottom:20px;
+    padding:0;
+}
+
+/* Perfil del animal */
+
+.tarjetaPerfil{
+    background:white;
+    border-radius:20px;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+    padding:35px;
+    display:flex;
+    gap:30px;
+    flex-wrap:wrap;
+    margin-bottom:25px;
+}
+
+.perfilImagen{
+    width:260px;
+    height:260px;
+    object-fit:cover;
+    border-radius:16px;
+    flex-shrink:0;
+}
+
+.perfilDatos{
+    flex:1;
+    min-width:260px;
+}
+
+.perfilDatos h2{
+    color:#0F766E;
+    margin-bottom:8px;
+}
+
+.perfilDatos h3{
+    color:#0F172A;
+    margin-top:20px;
+    margin-bottom:8px;
+}
+
+.perfilDatos > p{
+    color:#64748B;
+}
+
+.listaDatos{
+    list-style:none;
+    margin:16px 0;
+}
+
+.listaDatos li{
+    padding:6px 0;
+    font-size:14px;
+    border-bottom:1px solid #F1F5F9;
+    color:#334155;
+}
+
+#btnSolicitarAdopcion{
+    background:#2563EB;
+    color:white;
+    border:none;
+    padding:13px 26px;
+    border-radius:10px;
+    font-size:14px;
+    cursor:pointer;
+    margin-top:15px;
+    transition:.3s;
+}
+
+#btnSolicitarAdopcion:hover{
+    background:#1D4ED8;
+}
+
+.tarjetaRescatista{
+    background:white;
+    border-radius:20px;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+    padding:30px 35px;
+}
+
+.tarjetaRescatista h3{
+    color:#0F766E;
+    margin-bottom:15px;
+}
+
+.tarjetaRescatista p{
+    color:#475569;
+    margin-bottom:8px;
+}
+
+.tarjetaRescatista summary{
+    cursor:pointer;
+    color:#2563EB;
+    font-weight:600;
+    margin-top:10px;
+}
+
+.tarjetaRescatista details p{
+    margin-top:12px;
+}
+
+/* Formulario de solicitud */
+
+.panelSolicitud{
+    background:white;
+    border-radius:20px;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+    padding:35px;
+    margin-bottom:30px;
+}
+
+.campoFormulario{
+    margin-bottom:18px;
+}
+
+.campoFormulario label{
+    display:block;
+    font-weight:600;
+    font-size:14px;
+    color:#0F172A;
+    margin-bottom:6px;
+}
+
+.campoFormulario input,
+.campoFormulario select,
+.campoFormulario textarea{
+    width:100%;
+    max-width:450px;
+    padding:10px 12px;
+    border:1px solid #CBD5E1;
+    border-radius:10px;
+    font-size:14px;
+    font-family:'Poppins',sans-serif;
+}
+
+.campoFormulario textarea{
+    min-height:80px;
+    resize:vertical;
+}
+
+.errorCampo{
+    display:block;
+    font-size:12px;
+    margin-top:4px;
+}
+
+.campoCheckbox{
+    margin-bottom:18px;
+    font-size:14px;
+    color:#334155;
+}
+
+#btnEnviarSolicitud{
+    background:#2563EB;
+    color:white;
+    border:none;
+    padding:13px 26px;
+    border-radius:10px;
+    font-size:14px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+#btnEnviarSolicitud:hover{
+    background:#1D4ED8;
+}
+
+#btnEnviarSolicitud:disabled{
+    background:#BFDBFE;
+    cursor:not-allowed;
+}
+
+#mensajeSolicitud{
+    margin-top:15px;
+    font-weight:600;
+}
+
+.misSolicitudes{
+    margin-bottom:30px;
+}
+
+.tarjetaSolicitud{
+    background:white;
+    border-radius:15px;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+    padding:20px 25px;
+    margin-bottom:15px;
+}
+
+.tarjetaSolicitud h4{
+    color:#0F766E;
+    margin-bottom:6px;
+}
+
+.tarjetaSolicitud p{
+    color:#64748B;
+    font-size:13px;
+    margin:2px 0;
+}
+
+@media(max-width:700px){
+
+    .campoAncho{
+        grid-column:span 1;
+    }
+
+    .tarjetaPerfil{
+        flex-direction:column;
+    }
+
+    .perfilImagen{
+        width:100%;
+        height:220px;
+    }
+
+}

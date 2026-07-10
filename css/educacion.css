@@ -1,0 +1,410 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: #F4F8FB;
+}
+
+.sidebar {
+    width: 240px;
+    background: #0F766E;
+    color: white;
+    min-height: 100vh;
+    padding: 30px 20px;
+    position: fixed;
+    z-index: 100;
+}
+
+.sidebar h2 {
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 28px;
+}
+
+.sidebar ul {
+    list-style: none;
+}
+
+.sidebar li {
+    margin: 15px 0;
+}
+
+.sidebar a {
+    display: block;
+    color: white;
+    text-decoration: none;
+    padding: 14px 16px;
+    border-radius: 10px;
+    transition: .3s;
+}
+
+.sidebar a:hover,
+.sidebar .activo {
+    background: #14B8A6;
+}
+
+
+header, main, footer {
+    margin-left: 240px;
+}
+
+header {
+    padding: 40px 40px 20px 40px;
+}
+
+.back {
+    background: linear-gradient(135deg, #0F766E, #2563EB);
+    border-radius: 20px;
+    padding: 40px 60px;
+    color: white;
+    box-shadow: 0 4px 15px rgba(15, 118, 110, 0.1);
+}
+
+.menu h1 {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+.back p {
+    max-width: 640px;
+    line-height: 1.6;
+    opacity: 0.9;
+    font-size: 1.05rem;
+}
+
+main {
+    padding: 20px 40px 60px 40px;
+}
+
+/* ---------- MÓDULOS: 4 columnas visibles a la vez ---------- */
+
+.modulos {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 22px;
+    align-items: start;
+}
+
+.columna {
+    background: white;
+    border-radius: 18px;
+    padding: 26px 22px;
+    box-shadow: 0 8px 20px rgba(0,0,0,.04);
+    border-top: 4px solid #14B8A6;
+}
+
+.columna h2 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.05rem;
+    color: #0F766E;
+    margin-bottom: 8px;
+    line-height: 1.3;
+}
+
+.columna .intro {
+    color: #64748B;
+    font-size: 0.8rem;
+    line-height: 1.5;
+    margin-bottom: 18px;
+}
+
+/* paw-print icon, echoes the "Huellas" brand mark */
+.huella {
+    position: relative;
+    width: 14px;
+    height: 14px;
+    display: inline-block;
+    flex-shrink: 0;
+    color: #0F766E;
+}
+
+.huella::before,
+.huella::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: .55;
+}
+
+.huella::before {
+    width: 8px;
+    height: 8px;
+    bottom: 0;
+    left: 3px;
+}
+
+.huella::after {
+    width: 4px;
+    height: 4px;
+    top: 0;
+    left: 0;
+    box-shadow: 8px 0 0 currentColor, 3px 6px 0 currentColor, 11px 6px 0 currentColor;
+}
+
+/* ---------- TENENCIA: tarjetas con icono + descripción ---------- */
+
+.tarjetas {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.tarjeta {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 12px;
+    transition: .2s;
+}
+
+.tarjeta:hover {
+    border-color: #14B8A6;
+    box-shadow: 0 6px 14px rgba(0,0,0,.05);
+}
+
+.tarjeta .icono {
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.tarjeta h3 {
+    color: #0F172A;
+    font-size: 0.85rem;
+    margin-bottom: 3px;
+}
+
+.tarjeta p {
+    color: #64748B;
+    font-size: 0.76rem;
+    line-height: 1.4;
+}
+
+/* ---------- BIENESTAR: libertades numeradas ---------- */
+
+.libertades {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.libertades li {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #EEF2F6;
+}
+
+.libertades li:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.numero {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #0F766E;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.75rem;
+}
+
+.libertades h3 {
+    color: #0F172A;
+    font-size: 0.85rem;
+    margin-bottom: 3px;
+}
+
+.libertades p {
+    color: #64748B;
+    font-size: 0.76rem;
+    line-height: 1.4;
+}
+
+/* ---------- ADOPCIÓN: pasos en línea de tiempo ---------- */
+
+.pasos {
+    position: relative;
+}
+
+.paso {
+    display: flex;
+    gap: 12px;
+    position: relative;
+    padding-bottom: 20px;
+}
+
+.paso::before {
+    content: "";
+    position: absolute;
+    left: 11px;
+    top: 26px;
+    bottom: 0;
+    width: 2px;
+    background: #E2E8F0;
+}
+
+.paso:last-child::before {
+    display: none;
+}
+
+.marcador {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #2563EB;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.75rem;
+    z-index: 1;
+}
+
+.contenido h3 {
+    color: #0F172A;
+    font-size: 0.85rem;
+    margin-bottom: 3px;
+}
+
+.contenido p {
+    color: #64748B;
+    font-size: 0.76rem;
+    line-height: 1.4;
+}
+
+/* ---------- LEGISLACIÓN: acordeón compacto ---------- */
+
+.acordeon {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.item {
+    border: 1px solid #E2E8F0;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.pregunta {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 6px;
+    background: #F8FAFC;
+    border: none;
+    padding: 12px 14px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: #0F172A;
+    cursor: pointer;
+    text-align: left;
+}
+
+.flecha {
+    transition: transform .25s;
+    color: #0F766E;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.item.abierto .flecha {
+    transform: rotate(180deg);
+}
+
+.respuesta {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .3s ease;
+}
+
+.respuesta p {
+    padding: 12px 14px;
+    color: #64748B;
+    font-size: 0.78rem;
+    line-height: 1.5;
+}
+
+/* ---------- Responsive del módulo ---------- */
+
+@media(max-width: 1200px) {
+    .modulos {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media(max-width: 560px) {
+    .modulos {
+        grid-template-columns: 1fr;
+    }
+}
+
+footer {
+    text-align: center;
+    padding: 30px 40px;
+    color: #64748B;
+    margin-top: auto;
+}
+
+@media(max-width: 900px) {
+    body {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        position: relative;
+        min-height: auto;
+        padding: 20px;
+    }
+
+    .sidebar h2 {
+        margin-bottom: 20px;
+    }
+
+    header, main, footer {
+        margin-left: 0;
+    }
+
+    header {
+        padding: 20px;
+    }
+
+    .back {
+        padding: 30px;
+    }
+
+    main {
+        padding: 20px;
+    }
+
+    .tabs {
+        gap: 8px;
+    }
+
+    .tab {
+        padding: 10px 14px;
+        font-size: 0.85rem;
+    }
+}

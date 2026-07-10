@@ -1,0 +1,103 @@
+.contenedorSolicitudes{
+
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(330px,1fr));
+    gap:25px;
+
+}
+
+.solicitud{
+
+    background:white;
+    border-radius:18px;
+    padding:25px;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+
+}
+
+.solicitud h3{
+
+    color:#0F766E;
+    margin-bottom:15px;
+
+}
+
+.solicitud p{
+
+    margin:8px 0;
+    color:#475569;
+
+}
+
+.estado{
+
+    display:inline-block;
+    padding:6px 12px;
+    border-radius:20px;
+    color:white;
+    font-size:14px;
+    margin:15px 0;
+
+}
+
+.pendiente{
+
+    background:#F59E0B;
+
+}
+
+.aceptada{
+
+    background:#10B981;
+
+}
+
+.rechazada{
+
+    background:#EF4444;
+
+}
+
+.botones{
+
+    display:flex;
+    gap:10px;
+    margin-top:20px;
+
+}
+
+.btnAceptar{
+
+    flex:1;
+    border:none;
+    background:#10B981;
+    color:white;
+    padding:12px;
+    border-radius:10px;
+    cursor:pointer;
+
+}
+
+.btnRechazar{
+
+    flex:1;
+    border:none;
+    background:#EF4444;
+    color:white;
+    padding:12px;
+    border-radius:10px;
+    cursor:pointer;
+
+}
+
+.btnAceptar:hover{
+
+    opacity:.9;
+
+}
+
+.btnRechazar:hover{
+
+    opacity:.9;
+
+}

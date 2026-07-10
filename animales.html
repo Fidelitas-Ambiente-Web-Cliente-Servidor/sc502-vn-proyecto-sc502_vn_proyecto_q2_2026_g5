@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Animales</title>
+    <link rel="stylesheet" href="css/estilos.css">
+    <link rel="stylesheet" href="css/animales.css">
+
+
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+
+<body>
+
+    <aside class="sidebar">
+
+        <h2><i class="fa-solid fa-paw"></i> Huellas</h2>
+
+        <ul>
+            <li><a class="activo" href="index.html"><i class="fa-solid fa-house"></i> Inicio</a></li>
+            <li><a href="adopcion.html"><i class="fa-solid fa-heart"></i> Adopción</a></li>
+            <li><a href="alerta.html"><i class="fa-solid fa-location-dot"></i> Reportes</a></li>
+            <li><a href="dashboard.html"><i class="fa-solid fa-chart-column"></i> Dashboard</a></li>
+            <li><a href="educacion.html"><i class="fa-solid fa-book"></i> Educación</a></li>
+        </ul>
+
+    </aside>
+
+
+    <main class="contenido">
+
+        <header class="page-header">
+
+            <div>
+                <h1>Mis Animales</h1>
+                <p>Administra los animales registrados.</p>
+            </div>
+
+        </header>
+
+        <section class="panel-formulario">
+
+            <h2>Nuevo Animal</h2>
+
+            <form id="formAnimal">
+
+                <input type="hidden" id="idAnimal">
+
+                <input type="text" id="nombre" placeholder="Nombre" required>
+
+                <input type="text" id="especie" placeholder="Especie" required>
+
+                <input type="number" id="edad" placeholder="Edad" required>
+
+                <select id="estado">
+
+                    <option value="Disponible">Disponible</option>
+
+                    <option value="En tratamiento">En tratamiento</option>
+
+                    <option value="Adoptado">Adoptado</option>
+
+                </select>
+
+                <button type="submit">
+
+                    <i class="fa-solid fa-floppy-disk"></i>
+
+                    Guardar
+
+                </button>
+
+            </form>
+
+        </section>
+
+        <section class="panel-tabla">
+
+            <div class="barra-superior">
+
+                <input type="text" id="buscar" placeholder="Buscar por nombre o especie...">
+
+            </div>
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>Nombre</th>
+                        <th>Especie</th>
+                        <th>Edad</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="tablaAnimales">
+
+                </tbody>
+
+            </table>
+
+        </section>
+
+    </main>
+
+    <script src="js/animales.js"></script>
+
+</body>
+
+</html>

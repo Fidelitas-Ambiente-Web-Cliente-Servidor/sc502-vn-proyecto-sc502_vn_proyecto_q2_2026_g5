@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Perfil de la Organización</title>
+
+    <link rel="stylesheet" href="css/estilos.css">
+    <link rel="stylesheet" href="css/perfil.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+</head>
+
+<body>
+
+    <aside class="sidebar">
+
+        <h2><i class="fa-solid fa-paw"></i> Huellas</h2>
+
+        <ul>
+            <li><a class="activo" href="index.html"><i class="fa-solid fa-house"></i> Inicio</a></li>
+            <li><a href="adopcion.html"><i class="fa-solid fa-heart"></i> Adopción</a></li>
+            <li><a href="alerta.html"><i class="fa-solid fa-location-dot"></i> Reportes</a></li>
+            <li><a href="dashboard.html"><i class="fa-solid fa-chart-column"></i> Dashboard</a></li>
+            <li><a href="educacion.html"><i class="fa-solid fa-book"></i> Educación</a></li>
+        </ul>
+
+    </aside>
+
+    <main class="contenido">
+
+
+
+
+        <header class="page-header">
+
+            <h1>Perfil de la Organización</h1>
+
+            <p>Administra la información de Huellas a Casa.</p>
+
+        </header>
+
+        <section class="perfil-grid">
+
+            <div class="perfil-formulario">
+
+                <h2>Información General</h2>
+
+                <form id="formPerfil">
+
+                    <input type="text" id="nombre" placeholder="Nombre de la organización" required>
+
+                    <input type="email" id="correo" placeholder="Correo electrónico">
+
+                    <input type="text" id="telefono" placeholder="Teléfono">
+
+                    <input type="text" id="direccion" placeholder="Dirección">
+
+                    <input type="text" id="sitio" placeholder="Sitio web">
+
+                    <input type="text" id="facebook" placeholder="Facebook">
+
+                    <input type="text" id="instagram" placeholder="Instagram">
+
+                    <textarea id="descripcion" placeholder="Descripción"></textarea>
+
+                    <button type="submit">
+
+                        <i class="fa-solid fa-floppy-disk"></i>
+
+                        Guardar Información
+
+                    </button>
+
+                </form>
+
+            </div>
+
+            <div class="perfil-preview">
+
+                <div class="preview-card">
+
+                    <i class="fa-solid fa-building"></i>
+
+                    <h2 id="pNombre">Huellas a Casa</h2>
+
+                    <p id="pCorreo">correo@huellas.com</p>
+
+                    <p id="pTelefono">8888-8888</p>
+
+                    <p id="pDireccion">Costa Rica</p>
+
+                    <hr>
+
+                    <p id="pDescripcion">
+
+                        Organización dedicada al rescate y adopción responsable.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <script src="js/perfil.js"></script>
+
+</body>
+
+</html>

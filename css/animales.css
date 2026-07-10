@@ -1,0 +1,115 @@
+.panel-formulario,
+.panel-tabla{
+
+    background:white;
+    padding:30px;
+    border-radius:18px;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+    margin-bottom:35px;
+
+}
+
+.panel-formulario h2{
+
+    margin-bottom:20px;
+    color:#0F766E;
+
+}
+
+#formAnimal{
+
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
+
+}
+
+#formAnimal input,
+#formAnimal select{
+
+    padding:12px;
+    border:1px solid #ccc;
+    border-radius:10px;
+
+}
+
+#formAnimal button{
+
+    grid-column:span 2;
+    padding:14px;
+    border:none;
+    background:#2563EB;
+    color:white;
+    border-radius:10px;
+    cursor:pointer;
+
+}
+
+#buscar{
+
+    width:100%;
+    padding:12px;
+    border:1px solid #ccc;
+    border-radius:10px;
+    margin-bottom:20px;
+
+}
+
+table{
+
+    width:100%;
+    border-collapse:collapse;
+
+}
+
+thead{
+
+    background:#0F766E;
+    color:white;
+
+}
+
+th,td{
+
+    padding:15px;
+    text-align:center;
+
+}
+
+tbody tr{
+
+    border-bottom:1px solid #eee;
+
+}
+
+tbody tr:hover{
+
+    background:#f8fafc;
+
+}
+
+.btnEditar{
+
+    background:#14B8A6;
+    color:white;
+    border:none;
+    padding:8px 15px;
+    border-radius:8px;
+    cursor:pointer;
+    margin-right:5px;
+
+}
+
+.btnEliminar{
+
+    background:#EF4444;
+    color:white;
+    border:none;
+    padding:8px 15px;
+    border-radius:8px;
+    cursor:pointer;
+
+}
+
+
+

@@ -1,0 +1,114 @@
+.perfil-grid{
+
+    display:grid;
+    grid-template-columns:2fr 1fr;
+    gap:30px;
+
+}
+
+.perfil-formulario,
+.preview-card{
+
+    background:white;
+    padding:30px;
+    border-radius:18px;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+
+}
+
+.perfil-formulario h2{
+
+    color:#0F766E;
+    margin-bottom:20px;
+
+}
+
+#formPerfil{
+
+    display:grid;
+    gap:15px;
+
+}
+
+#formPerfil input,
+#formPerfil textarea{
+
+    padding:12px;
+    border:1px solid #D1D5DB;
+    border-radius:10px;
+    font-size:15px;
+
+}
+
+#formPerfil textarea{
+
+    resize:none;
+    min-height:120px;
+
+}
+
+#formPerfil button{
+
+    background:#2563EB;
+    color:white;
+    border:none;
+    padding:14px;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:16px;
+    transition:.3s;
+
+}
+
+#formPerfil button:hover{
+
+    background:#1D4ED8;
+
+}
+
+.preview-card{
+
+    text-align:center;
+
+}
+
+.preview-card i{
+
+    font-size:70px;
+    color:#0F766E;
+    margin-bottom:20px;
+
+}
+
+.preview-card h2{
+
+    color:#0F766E;
+    margin-bottom:10px;
+
+}
+
+.preview-card p{
+
+    color:#64748B;
+    margin:10px 0;
+    line-height:1.6;
+
+}
+
+.preview-card hr{
+
+    margin:20px 0;
+    border:none;
+    border-top:1px solid #E5E7EB;
+
+}
+
+@media(max-width:900px){
+
+    .perfil-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+}

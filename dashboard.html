@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reportes | Huellas a Casa</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="css/estilos.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+
+</head>
+
+<body>
+
+    <aside class="sidebar">
+
+        <h2><i class="fa-solid fa-paw"></i> Huellas</h2>
+
+        <ul>
+            <li><a class="activo" href="index.html"><i class="fa-solid fa-house"></i> Inicio</a></li>
+            <li><a href="adopcion.html"><i class="fa-solid fa-heart"></i> Adopción</a></li>
+            <li><a href="alerta.html"><i class="fa-solid fa-location-dot"></i> Reportes</a></li>
+            <li><a href="dashboard.html"><i class="fa-solid fa-chart-column"></i> Dashboard</a></li>
+            <li><a href="educacion.html"><i class="fa-solid fa-book"></i> Educación</a></li>
+        </ul>
+
+    </aside>
+
+    <main class="contenido">
+
+        <header class="page-header">
+
+            <div>
+                <h1>Dashboard</h1>
+                <p>Bienvenido al Panel de Gestión de Huellas a Casa.</p>
+            </div>
+
+        </header>
+
+        <!-- Estadísticas -->
+
+        <section class="dashboard-cards">
+
+            <div class="dashboard-card">
+
+                <i class="fa-solid fa-dog"></i>
+
+                <h2 id="totalAnimales">0</h2>
+
+                <p>Animales</p>
+
+            </div>
+
+            <div class="dashboard-card">
+
+                <i class="fa-solid fa-file-circle-check"></i>
+
+                <h2 id="totalSolicitudes">0</h2>
+
+                <p>Solicitudes</p>
+
+            </div>
+
+            <div class="dashboard-card">
+
+                <i class="fa-solid fa-heart"></i>
+
+                <h2 id="totalAdoptados">0</h2>
+
+                <p>Adoptados</p>
+
+            </div>
+
+            <div class="dashboard-card">
+
+                <i class="fa-solid fa-clock"></i>
+
+                <h2 id="totalPendientes">0</h2>
+
+                <p>Pendientes</p>
+
+            </div>
+
+        </section>
+
+        <!-- Accesos rápidos -->
+
+        <section class="quick-actions">
+
+            <h2>Accesos rápidos</h2>
+
+            <div class="acciones">
+
+                <a href="animales.html" class="accion">
+                    <i class="fa-solid fa-plus"></i>
+                    Agregar Animal
+                </a>
+
+                <a href="solicitudes.html" class="accion">
+                    <i class="fa-solid fa-file"></i>
+                    Solicitudes
+                </a>
+
+                <a href="perfil.html" class="accion">
+                    <i class="fa-solid fa-building"></i>
+                    Perfil
+                </a>
+
+                <a href="index.html" class="accion">
+                    <i class="fa-solid fa-house"></i>
+                    Inicio
+                </a>
+
+            </div>
+
+        </section>
+
+        <!-- Actividad -->
+
+        <section class="actividad">
+
+            <h2>Actividad reciente</h2>
+
+            <ul id="actividadLista">
+
+                <li>No hay actividad registrada.</li>
+
+            </ul>
+
+        </section>
+
+        <script src="js/PanelGestionJS/dashboard.js"></script>
+    </main>
+</body>
