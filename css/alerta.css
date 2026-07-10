@@ -141,7 +141,7 @@ fieldset legend {
 #formulario span {
     font-size: 0.8rem;
     font-weight: 500;
-    color: #EF4444; /* Rojo para los errores */
+    color: #EF4444;
     margin-top: 2px;
 }
 
