@@ -1,123 +1,127 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Módulo de Alertas</title>
+    <title>Reportes | Huellas a Casa</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="css/estilos.css">
     <link rel="stylesheet" href="css/alerta.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
 </head>
+
 <body>
 
-    <nav class="sidebar">
-        <h2>Huellas</h2>
+    <aside class="sidebar">
+
+        <h2><i class="fa-solid fa-paw"></i> Huellas</h2>
+
         <ul>
-            <li><a href="index.html">Inicio</a></li>
-            <li><a href="adopcion.html">Adopción</a></li>
-            <li><a href="alerta.html" class="activo">Alertas</a></li>
-            <li><a href="educacion.html">Educación</a></li>
+            <li><a class="activo" href="index.html"><i class="fa-solid fa-house"></i> Inicio</a></li>
+            <li><a href="adopcion.html"><i class="fa-solid fa-heart"></i> Adopción</a></li>
+            <li><a href="alerta.html"><i class="fa-solid fa-location-dot"></i> Reportes</a></li>
+            <li><a href="dashboard.html"><i class="fa-solid fa-chart-column"></i> Dashboard</a></li>
+            <li><a href="educacion.html"><i class="fa-solid fa-book"></i> Educación</a></li>
         </ul>
-    </nav>
 
-<header>
-    <div class="back">
-        <div class="menu">
-            <h1>Huellas a Casa</h1>
+    </aside>
+
+    <header>
+        <div class="back">
+            <div class="menu">
+                <h1>Huellas a Casa</h1>
+
+            </div>
+
+            <p>
+                Reporta animales perdidos o encontrados y consulta las alertas
+                publicadas por otros usuarios.
+            </p>
         </div>
-        <p>
-            Reporta animales perdidos o encontrados y consulta las alertas
-            publicadas por otros usuarios.
-        </p>
-    </div>
-</header>
+    </header>
 
-<main>
+    <main>
 
-    <fieldset>
+        <fieldset>
 
-        <legend>Crear Reporte</legend>
+            <legend>Crear Reporte</legend>
 
-        <form id="formulario">
+            <form id="formulario">
 
                 <div>
-                <label for="tipo">Tipo de reporte</label><br>
-                <select id="tipo">
-                    <option value="">Seleccione</option>
-                    <option>Animal Perdido</option>
-                    <option>Animal Encontrado</option>
-                </select>
-                <span id="errorTipo"></span>
+                    <label for="tipo">Tipo de reporte</label><br>
+                    <select id="tipo">
+                        <option value="">Seleccione</option>
+                        <option>Animal Perdido</option>
+                        <option>Animal Encontrado</option>
+                    </select>
+                    <span id="errorTipo"></span>
+                </div>
+
+
+                <br>
+
+                <div>
+                    <label for="animal">Nombre del animal</label><br>
+                    <input type="text" id="animal">
+                    <span id="errorAnimal"></span>
+                </div>
+
+                <br>
+
+                <div>
+                    <label for="ubicacion">Ubicación</label><br>
+                    <input type="text" id="ubicacion">
+                    <span id="errorUbicacion"></span>
+                </div>
+
+                <br>
+
+                <div>
+                    <label for="fecha">Fecha</label><br>
+                    <input type="date" id="fecha">
+                    <span id="errorFecha"></span>
+                </div>
+
+                <br>
+
+                <div>
+                    <label for="descripcion">Descripción</label><br>
+                    <textarea id="descripcion"></textarea>
+                    <span id="errorDescripcion"></span>
+                </div>
+
+                <br>
+
+                <button type="button" id="btnEnviar" disabled>
+                    Publicar Reporte
+                </button>
+
+
+                <div id="mensajeExito"></div>
+
+            </form>
+
+        </fieldset>
+
+
+        <section class="misAlertas">
+
+            <h2>Mis Alertas</h2>
+
+            <div id="contenedorAlertas">
+
             </div>
 
+        </section>
 
-            <br>
+    </main>
 
-            <div>
-                <label for="animal">Nombre del animal</label><br>
-                <input type="text" id="animal">
-                <span id="errorAnimal"></span>
-            </div>
-
-            <br>
-
-            <div>
-                <label for="ubicacion">Ubicación</label><br>
-                <input type="text" id="ubicacion">
-                <span id="errorUbicacion"></span>
-            </div>
-
-            <br>
-
-            <div>
-                <label for="fecha">Fecha</label><br>
-                <input type="date" id="fecha">
-                <span id="errorFecha"></span>
-            </div>
-
-            <br>
-
-            <div>
-                <label for="descripcion">Descripción</label><br>
-                <textarea id="descripcion"></textarea>
-                <span id="errorDescripcion"></span>
-            </div>
-
-            <br>
-
-            <button type="button" id="btnEnviar" disabled>
-                Publicar Reporte
-            </button>
-
-
-            <div id="mensajeExito"></div>
-
-        </form>
-
-    </fieldset>
-
-
-    <section class="misAlertas">
-
-        <h2>Mis Alertas</h2>
-
-        <div id="contenedorAlertas">
-
-        </div>
-
-    </section>
-
-</main>
-
-        <footer>
-
-            <p>© 2026 Huellas a Casa | Todos los derechos reservados.</p>
-
-        </footer>
-    </div>
-
-<script src="js/alerta.js"></script>
+    <script src="js/alerta.js"></script>
 
 </body>
+
 </html>
