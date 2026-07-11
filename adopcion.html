@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adopción | Huellas a Casa</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="css/estilos.css">
+    <link rel="stylesheet" href="css/adopcion.css">
+</head>
+<body>
+
+    <aside class="sidebar">
+
+        <h2><i class="fa-solid fa-paw"></i> Huellas</h2>
+
+        <ul>
+            <li><a class="activo" href="index.html"><i class="fa-solid fa-house"></i> Inicio</a></li>
+            <li><a href="adopcion.html"><i class="fa-solid fa-heart"></i> Adopción</a></li>
+            <li><a href="alerta.html"><i class="fa-solid fa-location-dot"></i> Reportes</a></li>
+            <li><a href="dashboard.html"><i class="fa-solid fa-chart-column"></i> Dashboard</a></li>
+            <li><a href="educacion.html"><i class="fa-solid fa-book"></i> Educación</a></li>
+        </ul>
+
+    </aside>
+
+    <div class="contenido">
+
+        <div class="hero">
+            <div>
+                <h1>Encuentra a tu nueva mascota</h1>
+                <p>Busca entre los animales disponibles para adopción, filtra según tu ubicación y posibilidades, y contacta directamente al rescatista encargado de cada caso.</p>
+                <a href="#panelFiltros" class="btn-principal">Buscar ahora</a>
+            </div>
+            <div class="hero-icono">
+                <i class="fa-solid fa-dog"></i>
+                <i class="fa-solid fa-cat"></i>
+            </div>
+        </div>
+
+        <div class="estadisticas">
+            <div class="stat-card">
+                <i class="fa-solid fa-paw"></i>
+                <h2 id="statTotal">0</h2>
+                <p>Animales registrados</p>
+            </div>
+            <div class="stat-card">
+                <i class="fa-solid fa-heart"></i>
+                <h2 id="statDisponibles">0</h2>
+                <p>Disponibles para adopción</p>
+            </div>
+            <div class="stat-card">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <h2 id="statResultados">0</h2>
+                <p>Resultados de tu búsqueda</p>
+            </div>
+            <div class="stat-card">
+                <i class="fa-solid fa-hand-holding-heart"></i>
+                <h2 id="statRescatistas">0</h2>
+                <p>Rescatistas activos</p>
+            </div>
+        </div>
+
+        <section id="vistaBusqueda" class="vista">
+
+            <h2 class="titulo">Filtrar animales</h2>
+
+            <div class="panelFiltros" id="panelFiltros">
+
+                <div class="filtrosGrid">
+
+                    <div class="campoFiltro">
+                        <label for="filtroNombre">Nombre</label>
+                        <input type="text" id="filtroNombre" placeholder="Ej: Firulais">
+                    </div>
+
+                    <div class="campoFiltro">
+                        <label for="filtroEspecie">Especie</label>
+                        <select id="filtroEspecie">
+                            <option value="Todas">Todas</option>
+                            <option value="Perro">Perro</option>
+                            <option value="Gato">Gato</option>
+                        </select>
+                    </div>
+
+                    <div class="campoFiltro">
+                        <label for="filtroRaza">Raza</label>
+                        <select id="filtroRaza">
+                            <option value="Todas">Todas</option>
+                        </select>
+                    </div>
+
+                    <div class="campoFiltro">
+                        <label for="filtroTamano">Tamaño</label>
+                        <select id="filtroTamano">
+                            <option value="Todos">Todos</option>
+                            <option value="Pequeño">Pequeño</option>
+                            <option value="Mediano">Mediano</option>
+                            <option value="Grande">Grande</option>
+                        </select>
+                    </div>
+
+                    <div class="campoFiltro">
+                        <label for="filtroProvincia">Provincia</label>
+                        <select id="filtroProvincia">
+                            <option value="Todas">Todas</option>
+                        </select>
+                    </div>
+
+                    <div class="campoFiltro">
+                        <label for="filtroCanton">Cantón</label>
+                        <select id="filtroCanton">
+                            <option value="Todos">Todos</option>
+                        </select>
+                    </div>
+
+                    <div class="campoFiltro campoAncho">
+                        <label for="filtroDistancia">Distancia máxima: <span id="filtroDistanciaValor">60 km</span></label>
+                        <input type="range" id="filtroDistancia" min="5" max="60" step="5" value="60">
+                    </div>
+
+                    <div class="campoFiltro campoBoton">
+                        <button type="button" id="btnLimpiar"><i class="fa-solid fa-broom"></i> Limpiar filtros</button>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <p id="resultadoConteo"></p>
+
+            <div id="contenedorAnimales" class="cards"></div>
+
+            <p id="sinResultados" class="sinResultados"></p>
+
+        </section>
+
+        <section id="vistaPerfil" class="vista oculto">
+
+            <button type="button" class="btnVolver" id="btnVolverBusqueda"><i class="fa-solid fa-arrow-left"></i> Volver a la búsqueda</button>
+
+            <div class="tarjetaPerfil">
+
+                <img class="perfilImagen" id="perfilFoto" src="" alt="Foto del animal">
+
+                <div class="perfilDatos">
+                    <h2 id="perfilNombre"></h2>
+                    <span class="estadoBadge" id="perfilEstado"></span>
+
+                    <p id="perfilEspecieRaza"></p>
+
+                    <ul class="listaDatos">
+                        <li><strong>Edad:</strong> <span id="perfilEdad"></span></li>
+                        <li><strong>Sexo:</strong> <span id="perfilSexo"></span></li>
+                        <li><strong>Tamaño:</strong> <span id="perfilTamano"></span></li>
+                        <li><strong>Ubicación:</strong> <span id="perfilUbicacion"></span></li>
+                        <li><strong>Distancia:</strong> <span id="perfilDistancia"></span></li>
+                        <li><strong>Vacunado:</strong> <span id="perfilVacunado"></span></li>
+                        <li><strong>Esterilizado:</strong> <span id="perfilEsterilizado"></span></li>
+                    </ul>
+
+                    <h3>Sobre mí</h3>
+                    <p id="perfilDescripcion"></p>
+
+                    <button type="button" id="btnSolicitarAdopcion"><i class="fa-solid fa-paper-plane"></i> Solicitar adopción</button>
+                </div>
+
+            </div>
+
+            <div class="tarjetaRescatista">
+                <h3><i class="fa-solid fa-hand-holding-heart"></i> Rescatista a cargo</h3>
+                <p><strong id="rescatistaNombre"></strong> — <span id="rescatistaOrg"></span></p>
+                <p><i class="fa-solid fa-location-dot"></i> <span id="rescatistaUbicacion"></span></p>
+                <p><i class="fa-solid fa-phone"></i> <span id="rescatistaTelefono"></span> &nbsp;|&nbsp; <i class="fa-solid fa-envelope"></i> <span id="rescatistaCorreo"></span></p>
+
+                <details>
+                    <summary>Ver perfil completo del rescatista</summary>
+                    <p id="rescatistaDescripcion"></p>
+                    <p id="rescatistaOtrosAnimales"></p>
+                </details>
+            </div>
+
+        </section>
+
+        <section id="vistaSolicitud" class="vista oculto">
+
+            <button type="button" class="btnVolver" id="btnVolverPerfil"><i class="fa-solid fa-arrow-left"></i> Volver al perfil</button>
+
+            <div class="panelSolicitud">
+                <h2 class="titulo">Solicitud de adopción para <span id="solicitudAnimalNombre"></span></h2>
+
+                <form id="formularioSolicitud">
+
+                    <div class="campoFormulario">
+                        <label for="solNombre">Nombre completo</label>
+                        <input type="text" id="solNombre">
+                        <span class="errorCampo" id="errorSolNombre"></span>
+                    </div>
+
+                    <div class="campoFormulario">
+                        <label for="solCedula">Cédula</label>
+                        <input type="text" id="solCedula" maxlength="9" placeholder="9 dígitos">
+                        <span class="errorCampo" id="errorSolCedula"></span>
+                    </div>
+
+                    <div class="campoFormulario">
+                        <label for="solTelefono">Teléfono</label>
+                        <input type="text" id="solTelefono" maxlength="8" placeholder="8 dígitos">
+                        <span class="errorCampo" id="errorSolTelefono"></span>
+                    </div>
+
+                    <div class="campoFormulario">
+                        <label for="solCorreo">Correo electrónico</label>
+                        <input type="email" id="solCorreo">
+                        <span class="errorCampo" id="errorSolCorreo"></span>
+                    </div>
+
+                    <div class="campoFormulario">
+                        <label for="solDireccion">Dirección exacta</label>
+                        <textarea id="solDireccion"></textarea>
+                        <span class="errorCampo" id="errorSolDireccion"></span>
+                    </div>
+
+                    <div class="campoFormulario">
+                        <label for="solVivienda">Tipo de vivienda</label>
+                        <select id="solVivienda">
+                            <option value="">Seleccione</option>
+                            <option>Casa</option>
+                            <option>Apartamento</option>
+                            <option>Finca</option>
+                        </select>
+                        <span class="errorCampo" id="errorSolVivienda"></span>
+                    </div>
+
+                    <div class="campoFormulario">
+                        <label for="solMotivo">¿Por qué quiere adoptar a esta mascota?</label>
+                        <textarea id="solMotivo"></textarea>
+                        <span class="errorCampo" id="errorSolMotivo"></span>
+                    </div>
+
+                    <div class="campoCheckbox">
+                        <label><input type="checkbox" id="solOtrasMascotas"> Actualmente tengo otras mascotas</label>
+                    </div>
+
+                    <div class="campoCheckbox">
+                        <label><input type="checkbox" id="solVisita"> Acepto una visita domiciliaria previa a la adopción</label>
+                        <span class="errorCampo" id="errorSolVisita"></span>
+                    </div>
+
+                    <button type="button" id="btnEnviarSolicitud" disabled><i class="fa-solid fa-paper-plane"></i> Enviar solicitud</button>
+
+                    <div id="mensajeSolicitud"></div>
+
+                </form>
+
+            </div>
+
+            <div class="misSolicitudes">
+                <h2 class="titulo">Mis solicitudes enviadas</h2>
+                <div id="contenedorSolicitudes"></div>
+            </div>
+
+        </section>
+
+        <div class="objetivo">
+            <h2>Antes de adoptar</h2>
+            <p>Adoptar es un compromiso a largo plazo. Considera el espacio disponible en tu hogar, el tiempo que puedes dedicarle, los gastos de alimentación y veterinaria, y conversa con el rescatista sobre el temperamento del animal antes de tomar la decisión. En <strong>Huellas a Casa</strong> promovemos la tenencia responsable.</p>
+        </div>
+
+        <footer>© 2026 Huellas a Casa | Todos los derechos reservados.</footer>
+
+    </div>
+
+<script src="js/adopcion.js"></script>
+
+</body>
+</html>
