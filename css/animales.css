@@ -1,115 +1,490 @@
+/* =========================================
+   PANELES PRINCIPALES
+========================================= */
+
 .panel-formulario,
-.panel-tabla{
-
-    background:white;
-    padding:30px;
-    border-radius:18px;
-    box-shadow:0 8px 20px rgba(0,0,0,.08);
-    margin-bottom:35px;
-
+.panel-tabla {
+    background: white;
+    padding: 30px;
+    border-radius: 18px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, .08);
+    margin-bottom: 35px;
 }
 
-.panel-formulario h2{
 
-    margin-bottom:20px;
-    color:#0F766E;
+/* =========================================
+   TÍTULO DEL FORMULARIO
+========================================= */
 
+.panel-formulario h2 {
+    margin-bottom: 25px;
+    color: #0F766E;
 }
 
-#formAnimal{
 
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:15px;
+/* =========================================
+   FORMULARIO
+========================================= */
 
+#formAnimal {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
 }
+
+
+/* =========================================
+   CAMPOS
+========================================= */
+
+.campo {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+
+.campo label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #334155;
+}
+
+
+.campo small {
+    color: #64748b;
+    font-size: 12px;
+}
+
+
+/* =========================================
+   INPUTS / SELECT / TEXTAREA
+========================================= */
 
 #formAnimal input,
-#formAnimal select{
+#formAnimal select,
+#formAnimal textarea {
+    width: 100%;
+    box-sizing: border-box;
 
-    padding:12px;
-    border:1px solid #ccc;
-    border-radius:10px;
+    padding: 12px;
 
-}
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
 
-#formAnimal button{
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
 
-    grid-column:span 2;
-    padding:14px;
-    border:none;
-    background:#2563EB;
-    color:white;
-    border-radius:10px;
-    cursor:pointer;
+    outline: none;
+    background: white;
 
-}
-
-#buscar{
-
-    width:100%;
-    padding:12px;
-    border:1px solid #ccc;
-    border-radius:10px;
-    margin-bottom:20px;
-
-}
-
-table{
-
-    width:100%;
-    border-collapse:collapse;
-
-}
-
-thead{
-
-    background:#0F766E;
-    color:white;
-
-}
-
-th,td{
-
-    padding:15px;
-    text-align:center;
-
-}
-
-tbody tr{
-
-    border-bottom:1px solid #eee;
-
-}
-
-tbody tr:hover{
-
-    background:#f8fafc;
-
-}
-
-.btnEditar{
-
-    background:#14B8A6;
-    color:white;
-    border:none;
-    padding:8px 15px;
-    border-radius:8px;
-    cursor:pointer;
-    margin-right:5px;
-
-}
-
-.btnEliminar{
-
-    background:#EF4444;
-    color:white;
-    border:none;
-    padding:8px 15px;
-    border-radius:8px;
-    cursor:pointer;
-
+    transition:
+        border-color .2s,
+        box-shadow .2s;
 }
 
 
+#formAnimal input:focus,
+#formAnimal select:focus,
+#formAnimal textarea:focus {
+    border-color: #14B8A6;
 
+    box-shadow:
+        0 0 0 3px
+        rgba(20, 184, 166, .12);
+}
+
+
+#formAnimal textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+
+/* =========================================
+   CAMPOS COMPLETOS
+========================================= */
+
+.campo-completo {
+    grid-column: span 2;
+}
+
+
+/* =========================================
+   BOTÓN GUARDAR
+========================================= */
+
+#formAnimal button[type="submit"] {
+    grid-column: span 2;
+
+    padding: 14px;
+
+    border: none;
+    border-radius: 10px;
+
+    background: #2563EB;
+    color: white;
+
+    cursor: pointer;
+
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+
+    transition:
+        background .2s,
+        transform .1s;
+}
+
+
+#formAnimal button[type="submit"]:hover {
+    background: #1D4ED8;
+}
+
+
+#formAnimal button[type="submit"]:active {
+    transform: scale(.98);
+}
+
+
+/* =========================================
+   CONTROL DE FOTO
+========================================= */
+
+.foto-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+
+/* =========================================
+   BOTÓN OBTENER FOTO
+========================================= */
+
+.btnFoto {
+    padding: 11px 18px;
+
+    border: none;
+    border-radius: 10px;
+
+    background: #0F766E;
+    color: white;
+
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+
+    cursor: pointer;
+
+    transition:
+        background .2s,
+        transform .1s;
+}
+
+
+.btnFoto:hover {
+    background: #0D9488;
+}
+
+
+.btnFoto:active {
+    transform: scale(.98);
+}
+
+
+.btnFoto:disabled {
+    opacity: .7;
+    cursor: not-allowed;
+}
+
+
+/* =========================================
+   VISTA PREVIA DE FOTO
+========================================= */
+
+.vista-foto {
+    width: 180px;
+    height: 180px;
+
+    margin-top: 15px;
+
+    border: 2px dashed #cbd5e1;
+    border-radius: 14px;
+
+    background: #f8fafc;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+
+    color: #94a3b8;
+
+    font-size: 13px;
+    text-align: center;
+}
+
+
+/* =========================================
+   IMAGEN DE LA API
+========================================= */
+
+.foto-preview {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    display: block;
+}
+
+
+/* =========================================
+   BUSCADOR
+========================================= */
+
+#buscar {
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 12px;
+
+    border: 1px solid #ccc;
+    border-radius: 10px;
+
+    margin-bottom: 20px;
+
+    font-family: 'Poppins', sans-serif;
+
+    outline: none;
+}
+
+
+#buscar:focus {
+    border-color: #14B8A6;
+}
+
+
+/* =========================================
+   TABLA
+========================================= */
+
+.panel-tabla {
+    overflow-x: auto;
+}
+
+
+table {
+    width: 100%;
+
+    min-width: 1500px;
+
+    border-collapse: collapse;
+}
+
+
+/* =========================================
+   ENCABEZADO TABLA
+========================================= */
+
+thead {
+    background: #0F766E;
+    color: white;
+}
+
+
+th {
+    padding: 13px;
+
+    text-align: center;
+
+    white-space: nowrap;
+
+    font-size: 14px;
+}
+
+
+td {
+    padding: 13px;
+
+    text-align: center;
+
+    white-space: nowrap;
+
+    font-size: 13px;
+
+    color: #334155;
+}
+
+
+/* =========================================
+   DESCRIPCIÓN
+========================================= */
+
+td:nth-child(10) {
+    white-space: normal;
+
+    min-width: 200px;
+    max-width: 250px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================
+   FOTO EN TABLA
+========================================= */
+
+.foto-animal {
+    width: 70px;
+    height: 70px;
+
+    object-fit: cover;
+
+    border-radius: 12px;
+
+    border: 2px solid #e2e8f0;
+
+    display: block;
+
+    margin: auto;
+}
+
+
+/* Columna de foto */
+
+td:nth-child(11) {
+    width: 90px;
+
+    min-width: 90px;
+
+    max-width: 90px;
+}
+
+
+/* =========================================
+   FILAS
+========================================= */
+
+tbody tr {
+    border-bottom: 1px solid #eee;
+
+    transition: background .2s;
+}
+
+
+tbody tr:hover {
+    background: #f8fafc;
+}
+
+
+/* =========================================
+   BOTÓN EDITAR
+========================================= */
+
+.btnEditar {
+    background: #14B8A6;
+
+    color: white;
+
+    border: none;
+
+    padding: 8px 15px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    margin-right: 5px;
+
+    font-family: 'Poppins', sans-serif;
+
+    font-size: 13px;
+}
+
+
+.btnEditar:hover {
+    background: #0D9488;
+}
+
+
+/* =========================================
+   BOTÓN ELIMINAR
+========================================= */
+
+.btnEliminar {
+    background: #EF4444;
+
+    color: white;
+
+    border: none;
+
+    padding: 8px 15px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-family: 'Poppins', sans-serif;
+
+    font-size: 13px;
+}
+
+
+.btnEliminar:hover {
+    background: #DC2626;
+}
+
+
+/* =========================================
+   COLUMNA ACCIONES
+========================================= */
+
+td:last-child {
+    min-width: 180px;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 700px) {
+
+    #formAnimal {
+        grid-template-columns: 1fr;
+    }
+
+
+    .campo-completo,
+    #formAnimal button[type="submit"] {
+        grid-column: span 1;
+    }
+
+
+    .panel-formulario,
+    .panel-tabla {
+        padding: 20px;
+    }
+
+
+    .vista-foto {
+        width: 150px;
+        height: 150px;
+    }
+
+
+    .foto-animal {
+        width: 60px;
+        height: 60px;
+    }
+
+
+    table {
+        min-width: 1200px;
+    }
+
+}

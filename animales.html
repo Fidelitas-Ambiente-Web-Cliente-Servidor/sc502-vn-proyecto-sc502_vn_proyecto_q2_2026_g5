@@ -4,11 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Mis Animales</title>
+
     <link rel="stylesheet" href="css/estilos.css">
     <link rel="stylesheet" href="css/animales.css">
-
-
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
 
@@ -16,20 +16,55 @@
         rel="stylesheet">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
 </head>
 
 <body>
 
     <aside class="sidebar">
 
-        <h2><i class="fa-solid fa-paw"></i> Huellas</h2>
+        <h2>
+            <i class="fa-solid fa-paw"></i>
+            Huellas
+        </h2>
 
         <ul>
-            <li><a class="activo" href="index.html"><i class="fa-solid fa-house"></i> Inicio</a></li>
-            <li><a href="adopcion.html"><i class="fa-solid fa-heart"></i> Adopción</a></li>
-            <li><a href="alerta.html"><i class="fa-solid fa-location-dot"></i> Reportes</a></li>
-            <li><a href="dashboard.html"><i class="fa-solid fa-chart-column"></i> Dashboard</a></li>
-            <li><a href="educacion.html"><i class="fa-solid fa-book"></i> Educación</a></li>
+
+            <li>
+                <a class="activo" href="index.html">
+                    <i class="fa-solid fa-house"></i>
+                    Inicio
+                </a>
+            </li>
+
+            <li>
+                <a href="adopcion.html">
+                    <i class="fa-solid fa-heart"></i>
+                    Adopción
+                </a>
+            </li>
+
+            <li>
+                <a href="alerta.html">
+                    <i class="fa-solid fa-location-dot"></i>
+                    Reportes
+                </a>
+            </li>
+
+            <li>
+                <a href="dashboard.html">
+                    <i class="fa-solid fa-chart-column"></i>
+                    Dashboard
+                </a>
+            </li>
+
+            <li>
+                <a href="educacion.html">
+                    <i class="fa-solid fa-book"></i>
+                    Educación
+                </a>
+            </li>
+
         </ul>
 
     </aside>
@@ -40,35 +75,277 @@
         <header class="page-header">
 
             <div>
+
                 <h1>Mis Animales</h1>
-                <p>Administra los animales registrados.</p>
+
+                <p>
+                    Administra los animales registrados.
+                </p>
+
             </div>
 
         </header>
 
+
+        <!-- =====================================
+             FORMULARIO
+        ====================================== -->
+
         <section class="panel-formulario">
 
-            <h2>Nuevo Animal</h2>
+            <h2>
+                <i class="fa-solid fa-paw"></i>
+                Nuevo Animal
+            </h2>
+
 
             <form id="formAnimal">
 
                 <input type="hidden" id="idAnimal">
 
-                <input type="text" id="nombre" placeholder="Nombre" required>
 
-                <input type="text" id="especie" placeholder="Especie" required>
+                <!-- NOMBRE -->
 
-                <input type="number" id="edad" placeholder="Edad" required>
+                <div class="campo">
 
-                <select id="estado">
+                    <label for="nombre">
+                        Nombre
+                    </label>
 
-                    <option value="Disponible">Disponible</option>
+                    <input type="text" id="nombre" placeholder="Nombre del animal" required>
 
-                    <option value="En tratamiento">En tratamiento</option>
+                </div>
 
-                    <option value="Adoptado">Adoptado</option>
 
-                </select>
+                <!-- ESPECIE -->
+
+                <div class="campo">
+
+                    <label for="especie">
+                        Especie
+                    </label>
+
+                    <select id="especie" required>
+
+                        <option value="">
+                            Seleccione una especie
+                        </option>
+
+                        <option value="Perro">
+                            Perro
+                        </option>
+
+                        <option value="Gato">
+                            Gato
+                        </option>
+
+                        <option value="Otro">
+                            Otro
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- RAZA -->
+
+                <div class="campo">
+
+                    <label for="raza">
+
+                        <i class="fa-solid fa-dog"></i>
+                        Raza
+
+                    </label>
+
+                    <select id="raza">
+
+                        <option value="">
+                            Cargando razas...
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- FOTO -->
+
+                <div class="campo">
+
+                    <label>
+                        Foto de la mascota
+                    </label>
+
+
+                    <div class="foto-control">
+
+                        <button type="button" id="btnFoto" class="btnFoto">
+
+                            <i class="fa-solid fa-dog"></i>
+
+                            Obtener foto
+
+                        </button>
+
+
+                        <!-- Aquí guardamos la URL -->
+
+                        <input type="hidden" id="foto">
+
+                    </div>
+
+
+                    <div id="vistaFoto" class="vista-foto">
+
+                        <span>
+                            Seleccione una raza y obtenga una foto
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- SEXO -->
+
+                <div class="campo">
+
+                    <label for="sexo">
+                        Sexo
+                    </label>
+
+                    <select id="sexo">
+
+                        <option value="">
+                            Seleccione
+                        </option>
+
+                        <option value="Macho">
+                            Macho
+                        </option>
+
+                        <option value="Hembra">
+                            Hembra
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- EDAD -->
+
+                <div class="campo">
+
+                    <label for="edad">
+                        Edad aproximada
+                    </label>
+
+                    <input type="number" id="edad" placeholder="Edad en años" min="0">
+
+                </div>
+
+
+                <!-- TAMAÑO -->
+
+                <div class="campo">
+
+                    <label for="tamano">
+                        Tamaño
+                    </label>
+
+                    <select id="tamano">
+
+                        <option value="">
+                            Seleccione
+                        </option>
+
+                        <option value="Pequeño">
+                            Pequeño
+                        </option>
+
+                        <option value="Mediano">
+                            Mediano
+                        </option>
+
+                        <option value="Grande">
+                            Grande
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- ESTADO SALUD -->
+
+                <div class="campo">
+
+                    <label for="estadoSalud">
+                        Estado de salud
+                    </label>
+
+                    <input type="text" id="estadoSalud" placeholder="Ej. Saludable">
+
+                </div>
+
+
+                <!-- VACUNAS -->
+
+                <div class="campo">
+
+                    <label for="vacunas">
+                        Vacunas
+                    </label>
+
+                    <input type="text" id="vacunas" placeholder="Ej. Todas al día">
+
+                </div>
+
+
+                <!-- DESCRIPCIÓN -->
+
+                <div class="campo campo-completo">
+
+                    <label for="descripcion">
+                        Descripción
+                    </label>
+
+                    <textarea id="descripcion" placeholder="Cuéntanos un poco sobre el animal..." rows="4"></textarea>
+
+                </div>
+
+
+                <!-- ESTADO -->
+
+                <div class="campo">
+
+                    <label for="estado">
+                        Estado
+                    </label>
+
+                    <select id="estado">
+
+                        <option value="Disponible">
+                            Disponible
+                        </option>
+
+                        <option value="No disponible">
+                            No disponible
+                        </option>
+
+                        <option value="Adoptado">
+                            Adoptado
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- GUARDAR -->
 
                 <button type="submit">
 
@@ -82,6 +359,11 @@
 
         </section>
 
+
+        <!-- =====================================
+             TABLA
+        ====================================== -->
+
         <section class="panel-tabla">
 
             <div class="barra-superior">
@@ -90,31 +372,60 @@
 
             </div>
 
-            <table>
 
-                <thead>
+            <div class="tabla-contenedor">
 
-                    <tr>
+                <table>
 
-                        <th>Nombre</th>
-                        <th>Especie</th>
-                        <th>Edad</th>
-                        <th>Estado</th>
-                        <th>Acciones</th>
+                    <thead>
 
-                    </tr>
+                        <tr>
 
-                </thead>
+                            <th>ID</th>
 
-                <tbody id="tablaAnimales">
+                            <th>Nombre</th>
 
-                </tbody>
+                            <th>Especie</th>
 
-            </table>
+                            <th>Raza</th>
+
+                            <th>Sexo</th>
+
+                            <th>Edad</th>
+
+                            <th>Tamaño</th>
+
+                            <th>Estado de salud</th>
+
+                            <th>Vacunas</th>
+
+                            <th>Descripción</th>
+
+                            <th>Foto</th>
+
+                            <th>Estado</th>
+
+                            <th>Fecha de registro</th>
+
+                            <th>Acciones</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="tablaAnimales">
+
+                    </tbody>
+
+                </table>
+
+            </div>
 
         </section>
 
     </main>
+
 
     <script src="js/animales.js"></script>
 
