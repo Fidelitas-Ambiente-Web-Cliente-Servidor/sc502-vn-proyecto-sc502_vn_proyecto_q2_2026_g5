@@ -12,9 +12,45 @@ class Solicitud
     }
 
 
-    // =========================================
-    // OBTENER UNA SOLICITUD (con datos de la mascota)
-    // =========================================
+    public function obtenerTodas()
+    {
+        $sql = "SELECT
+                    s.id_solicitud,
+                    s.id_mascota,
+                    s.id_usuario,
+                    s.fecha_solicitud,
+                    s.estado,
+                    s.observaciones,
+
+                    m.nombre AS mascota,
+                    m.especie,
+                    m.raza,
+                    m.foto,
+                    m.estado AS estado_mascota,
+
+                    u.nombre AS usuario_nombre,
+                    u.apellido AS usuario_apellido,
+                    u.correo AS usuario_correo,
+                    u.telefono AS usuario_telefono
+
+                FROM solicitudes_adopcion s
+
+                INNER JOIN mascotas m
+                    ON s.id_mascota = m.id_mascota
+
+                INNER JOIN usuarios u
+                    ON s.id_usuario = u.id_usuario
+
+                ORDER BY s.fecha_solicitud DESC";
+
+
+        $consulta = $this->conexion->prepare($sql);
+
+        $consulta->execute();
+
+        return $consulta->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 
     public function obtenerPorId($id)
     {
@@ -25,11 +61,28 @@ class Solicitud
                     s.fecha_solicitud,
                     s.estado,
                     s.observaciones,
-                    m.id_usuario AS id_usuario_mascota,
-                    m.nombre AS nombre_mascota
+
+                    m.nombre AS mascota,
+                    m.especie,
+                    m.raza,
+                    m.foto,
+                    m.estado AS estado_mascota,
+
+                    u.nombre AS usuario_nombre,
+                    u.apellido AS usuario_apellido,
+                    u.correo AS usuario_correo,
+                    u.telefono AS usuario_telefono
+
                 FROM solicitudes_adopcion s
-                INNER JOIN mascotas m ON m.id_mascota = s.id_mascota
+
+                INNER JOIN mascotas m
+                    ON s.id_mascota = m.id_mascota
+
+                INNER JOIN usuarios u
+                    ON s.id_usuario = u.id_usuario
+
                 WHERE s.id_solicitud = :id";
+
 
         $consulta = $this->conexion->prepare($sql);
 
@@ -41,163 +94,165 @@ class Solicitud
     }
 
 
-    // =========================================
-    // MIS SOLICITUDES ENVIADAS
-    // (las que yo hice para adoptar animales)
-    // =========================================
 
-    public function obtenerEnviadasPor($id_usuario)
-    {
-        $sql = "SELECT
-                    s.id_solicitud,
-                    s.fecha_solicitud,
-                    s.estado,
-                    s.observaciones,
-                    m.id_mascota,
-                    m.nombre AS nombre_mascota,
-                    m.especie,
-                    m.foto
-                FROM solicitudes_adopcion s
-                INNER JOIN mascotas m ON m.id_mascota = s.id_mascota
-                WHERE s.id_usuario = :id_usuario
-                ORDER BY s.id_solicitud DESC";
+    public function actualizarEstado(
+        $id,
+        $estado,
+        $observaciones = null
+    ) {
 
-        $consulta = $this->conexion->prepare($sql);
-
-        $consulta->execute([
-            ':id_usuario' => $id_usuario
-        ]);
-
-        return $consulta->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-
-    // =========================================
-    // SOLICITUDES RECIBIDAS
-    // (las que otros usuarios hicieron por
-    // animales que YO registré)
-    // =========================================
-
-    public function obtenerRecibidasPor($id_usuario)
-    {
-        $sql = "SELECT
-                    s.id_solicitud,
-                    s.fecha_solicitud,
-                    s.estado,
-                    s.observaciones,
-                    m.id_mascota,
-                    m.nombre AS nombre_mascota,
-                    m.especie,
-                    m.foto,
-                    u.nombre AS solicitante_nombre,
-                    u.apellido AS solicitante_apellido,
-                    u.correo AS solicitante_correo,
-                    u.telefono AS solicitante_telefono
-                FROM solicitudes_adopcion s
-                INNER JOIN mascotas m ON m.id_mascota = s.id_mascota
-                INNER JOIN usuarios u ON u.id_usuario = s.id_usuario
-                WHERE m.id_usuario = :id_usuario
-                ORDER BY s.id_solicitud DESC";
-
-        $consulta = $this->conexion->prepare($sql);
-
-        $consulta->execute([
-            ':id_usuario' => $id_usuario
-        ]);
-
-        return $consulta->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-
-    // =========================================
-    // YA EXISTE UNA SOLICITUD PENDIENTE
-    // (evita que la misma persona duplique
-    // la solicitud por el mismo animal)
-    // =========================================
-
-    public function existeSolicitudActiva($id_mascota, $id_usuario)
-    {
-        $sql = "SELECT id_solicitud
-                FROM solicitudes_adopcion
-                WHERE id_mascota = :id_mascota
-                    AND id_usuario = :id_usuario
-                    AND estado IN ('Pendiente', 'En revisión', 'Aprobada')";
-
-        $consulta = $this->conexion->prepare($sql);
-
-        $consulta->execute([
-            ':id_mascota' => $id_mascota,
-            ':id_usuario' => $id_usuario
-        ]);
-
-        return $consulta->fetch(PDO::FETCH_ASSOC) !== false;
-    }
-
-
-    // =========================================
-    // CREAR SOLICITUD
-    // =========================================
-
-    public function crear($id_mascota, $id_usuario, $observaciones)
-    {
-        $sql = "INSERT INTO solicitudes_adopcion
-                (
-                    id_mascota,
-                    id_usuario,
-                    observaciones
-                )
-                VALUES
-                (
-                    :id_mascota,
-                    :id_usuario,
-                    :observaciones
-                )";
-
-        $consulta = $this->conexion->prepare($sql);
-
-        $consulta->execute([
-            ':id_mascota' => $id_mascota,
-            ':id_usuario' => $id_usuario,
-            ':observaciones' => $observaciones
-        ]);
-
-        return $this->conexion->lastInsertId();
-    }
-
-
-    // =========================================
-    // ACTUALIZAR ESTADO (aceptar / rechazar)
-    // =========================================
-
-    public function actualizarEstado($id, $estado)
-    {
         $sql = "UPDATE solicitudes_adopcion
-                SET estado = :estado
+
+                SET
+                    estado = :estado,
+                    observaciones = :observaciones
+
                 WHERE id_solicitud = :id";
 
+
         $consulta = $this->conexion->prepare($sql);
+
 
         return $consulta->execute([
             ':id' => $id,
-            ':estado' => $estado
+            ':estado' => $estado,
+            ':observaciones' => $observaciones
         ]);
     }
 
 
-    // =========================================
-    // MARCAR MASCOTA COMO ADOPTADA
-    // =========================================
+    public function completarAdopcion(
+        $idSolicitud,
+        $idMascota,
+        $observaciones = null
+    ) {
 
-    public function marcarMascotaAdoptada($id_mascota)
+        try {
+
+            $this->conexion->beginTransaction();
+
+
+            // Actualizar solicitud
+
+            $sqlSolicitud =
+                "UPDATE solicitudes_adopcion
+
+                 SET
+                    estado = 'Completada',
+                    observaciones = :observaciones
+
+                 WHERE id_solicitud = :id_solicitud";
+
+
+            $consultaSolicitud =
+                $this->conexion->prepare(
+                    $sqlSolicitud
+                );
+
+
+            $consultaSolicitud->execute([
+                ':id_solicitud' => $idSolicitud,
+                ':observaciones' => $observaciones
+            ]);
+
+
+            // Actualizar mascota
+
+            $sqlMascota =
+                "UPDATE mascotas
+
+                 SET estado = 'Adoptado'
+
+                 WHERE id_mascota = :id_mascota";
+
+
+            $consultaMascota =
+                $this->conexion->prepare(
+                    $sqlMascota
+                );
+
+
+            $consultaMascota->execute([
+                ':id_mascota' => $idMascota
+            ]);
+
+
+            // Cancelar otras solicitudes activas
+            // de esa misma mascota
+
+            $sqlOtras =
+                "UPDATE solicitudes_adopcion
+
+                 SET estado = 'Cancelada'
+
+                 WHERE id_mascota = :id_mascota
+
+                 AND id_solicitud <> :id_solicitud
+
+                 AND estado IN (
+                    'Pendiente',
+                    'En revisión',
+                    'Aprobada'
+                 )";
+
+
+            $consultaOtras =
+                $this->conexion->prepare(
+                    $sqlOtras
+                );
+
+
+            $consultaOtras->execute([
+                ':id_mascota' => $idMascota,
+                ':id_solicitud' => $idSolicitud
+            ]);
+
+
+            $this->conexion->commit();
+
+
+            return true;
+
+
+        } catch (Exception $e) {
+
+            if (
+                $this->conexion->inTransaction()
+            ) {
+
+                $this->conexion->rollBack();
+
+            }
+
+
+            throw $e;
+        }
+    }
+
+
+    public function contarTodas()
     {
-        $sql = "UPDATE mascotas
-                SET estado = 'Adoptado'
-                WHERE id_mascota = :id_mascota";
+        $sql = "SELECT COUNT(*)
+                FROM solicitudes_adopcion";
 
-        $consulta = $this->conexion->prepare($sql);
 
-        return $consulta->execute([
-            ':id_mascota' => $id_mascota
-        ]);
+        return $this->conexion
+            ->query($sql)
+            ->fetchColumn();
+    }
+
+
+    public function contarPendientes()
+    {
+        $sql = "SELECT COUNT(*)
+
+                FROM solicitudes_adopcion
+
+                WHERE estado = 'Pendiente'";
+
+
+        return $this->conexion
+            ->query($sql)
+            ->fetchColumn();
     }
 }

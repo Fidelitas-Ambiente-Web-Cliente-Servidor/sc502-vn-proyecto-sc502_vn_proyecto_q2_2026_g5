@@ -6,17 +6,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Perfil de la Organización</title>
+    <title>Organizaciones | Huellas a Casa</title>
 
     <link rel="stylesheet" href="css/estilos.css">
     <link rel="stylesheet" href="css/perfil.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    >
 
 </head>
 
@@ -24,60 +29,252 @@
 
     <aside class="sidebar">
 
-        <h2><i class="fa-solid fa-paw"></i> Huellas</h2>
+        <h2>
+            <i class="fa-solid fa-paw"></i>
+            Huellas
+        </h2>
 
         <ul>
-            <li><a class="activo" href="index.html"><i class="fa-solid fa-house"></i> Inicio</a></li>
-            <li><a href="adopcion.html"><i class="fa-solid fa-heart"></i> Adopción</a></li>
-            <li><a href="alerta.html"><i class="fa-solid fa-location-dot"></i> Reportes</a></li>
-            <li><a href="dashboard.html"><i class="fa-solid fa-chart-column"></i> Dashboard</a></li>
-            <li><a href="educacion.html"><i class="fa-solid fa-book"></i> Educación</a></li>
+
+            <li>
+                <a href="index.html">
+                    <i class="fa-solid fa-house"></i>
+                    Inicio
+                </a>
+            </li>
+
+            <li>
+                <a href="adopcion.html">
+                    <i class="fa-solid fa-heart"></i>
+                    Adopción
+                </a>
+            </li>
+
+            <li>
+                <a href="alerta.html">
+                    <i class="fa-solid fa-location-dot"></i>
+                    Reportes
+                </a>
+            </li>
+
+            <li>
+                <a class="activo" href="dashboard.html">
+                    <i class="fa-solid fa-chart-column"></i>
+                    Dashboard
+                </a>
+            </li>
+
+            <li>
+                <a href="educacion.html">
+                    <i class="fa-solid fa-book"></i>
+                    Educación
+                </a>
+            </li>
+
         </ul>
 
     </aside>
 
+
     <main class="contenido">
-
-
-
 
         <header class="page-header">
 
-            <h1>Perfil de la Organización</h1>
+            <div>
 
-            <p>Administra la información de Huellas a Casa.</p>
+                <h1>
+                    Organizaciones
+                </h1>
+
+                <p>
+                    Consulta, registra y administra las organizaciones
+                    y sus usuarios asociados.
+                </p>
+
+            </div>
 
         </header>
 
+
+        <!-- =========================================
+             SELECCIÓN DE ORGANIZACIÓN
+        ========================================== -->
+
+        <section class="panel-organizaciones">
+
+            <div class="campo">
+
+                <label for="selectorOrganizacion">
+                    Organización
+                </label>
+
+                <select id="selectorOrganizacion">
+
+                    <option value="">
+                        Cargando organizaciones...
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <button
+                type="button"
+                id="btnNuevaOrganizacion"
+                class="btnNuevaOrganizacion"
+            >
+
+                <i class="fa-solid fa-plus"></i>
+
+                Nueva organización
+
+            </button>
+
+        </section>
+
+
+        <!-- =========================================
+             PERFIL DE ORGANIZACIÓN
+        ========================================== -->
+
         <section class="perfil-grid">
+
+
+            <!-- FORMULARIO -->
 
             <div class="perfil-formulario">
 
-                <h2>Información General</h2>
+                <h2 id="tituloFormulario">
+
+                    <i class="fa-solid fa-building"></i>
+
+                    Información General
+
+                </h2>
+
 
                 <form id="formPerfil">
 
-                    <input type="text" id="nombre" placeholder="Nombre de la organización" required>
+                    <input
+                        type="hidden"
+                        id="idOrganizacion"
+                    >
 
-                    <input type="email" id="correo" placeholder="Correo electrónico">
 
-                    <input type="text" id="telefono" placeholder="Teléfono">
+                    <div class="campo">
 
-                    <input type="text" id="direccion" placeholder="Dirección">
+                        <label for="nombre">
+                            Nombre de la organización
+                        </label>
 
-                    <input type="text" id="sitio" placeholder="Sitio web">
+                        <input
+                            type="text"
+                            id="nombre"
+                            placeholder="Nombre de la organización"
+                            required
+                        >
 
-                    <input type="text" id="facebook" placeholder="Facebook">
+                    </div>
 
-                    <input type="text" id="instagram" placeholder="Instagram">
 
-                    <textarea id="descripcion" placeholder="Descripción"></textarea>
+                    <div class="campo">
 
-                    <button type="submit">
+                        <label for="tipo">
+                            Tipo de organización
+                        </label>
+
+                        <select id="tipo" required>
+
+                            <option value="">
+                                Seleccione
+                            </option>
+
+                            <option value="Fundacion">
+                                Fundación
+                            </option>
+
+                            <option value="Rescatista">
+                                Rescatista
+                            </option>
+
+                            <option value="Refugio">
+                                Refugio
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="campo">
+
+                        <label for="correo">
+                            Correo electrónico
+                        </label>
+
+                        <input
+                            type="email"
+                            id="correo"
+                            placeholder="correo@ejemplo.com"
+                        >
+
+                    </div>
+
+
+                    <div class="campo">
+
+                        <label for="telefono">
+                            Teléfono
+                        </label>
+
+                        <input
+                            type="text"
+                            id="telefono"
+                            placeholder="8888-8888"
+                        >
+
+                    </div>
+
+
+                    <div class="campo">
+
+                        <label for="direccion">
+                            Dirección
+                        </label>
+
+                        <input
+                            type="text"
+                            id="direccion"
+                            placeholder="Dirección de la organización"
+                        >
+
+                    </div>
+
+
+                    <div class="campo">
+
+                        <label for="canton">
+                            Cantón
+                        </label>
+
+                        <input
+                            type="text"
+                            id="canton"
+                            placeholder="Ej. San José"
+                        >
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        id="btnGuardar"
+                    >
 
                         <i class="fa-solid fa-floppy-disk"></i>
 
-                        Guardar Información
+                        Guardar cambios
 
                     </button>
 
@@ -85,29 +282,167 @@
 
             </div>
 
+
+            <!-- PREVIEW -->
+
             <div class="perfil-preview">
 
                 <div class="preview-card">
 
-                    <i class="fa-solid fa-building"></i>
+                    <div class="preview-icono">
 
-                    <h2 id="pNombre">Huellas a Casa</h2>
+                        <i class="fa-solid fa-paw"></i>
 
-                    <p id="pCorreo">correo@huellas.com</p>
+                    </div>
 
-                    <p id="pTelefono">8888-8888</p>
 
-                    <p id="pDireccion">Costa Rica</p>
+                    <h2 id="pNombre">
+                        Organización
+                    </h2>
 
-                    <hr>
 
-                    <p id="pDescripcion">
+                    <span
+                        id="pTipo"
+                        class="tipo-organizacion"
+                    >
+                        Tipo
+                    </span>
 
-                        Organización dedicada al rescate y adopción responsable.
 
+                    <div class="preview-datos">
+
+                        <p>
+
+                            <i class="fa-solid fa-envelope"></i>
+
+                            <span id="pCorreo">
+                                No indicado
+                            </span>
+
+                        </p>
+
+
+                        <p>
+
+                            <i class="fa-solid fa-phone"></i>
+
+                            <span id="pTelefono">
+                                No indicado
+                            </span>
+
+                        </p>
+
+
+                        <p>
+
+                            <i class="fa-solid fa-location-dot"></i>
+
+                            <span id="pDireccion">
+                                No indicada
+                            </span>
+
+                        </p>
+
+
+                        <p>
+
+                            <i class="fa-solid fa-map"></i>
+
+                            <span id="pCanton">
+                                No indicado
+                            </span>
+
+                        </p>
+
+                    </div>
+
+
+                    <div
+                        id="pVerificada"
+                        class="verificacion"
+                    >
+                    </div>
+
+
+                    <small id="pFecha">
+                    </small>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================================
+             USUARIOS DE LA ORGANIZACIÓN
+        ========================================== -->
+
+        <section class="panel-usuarios">
+
+            <div class="panel-usuarios-header">
+
+                <div>
+
+                    <h2>
+
+                        <i class="fa-solid fa-users"></i>
+
+                        Usuarios de la organización
+
+                    </h2>
+
+                    <p>
+                        Asocia usuarios existentes a la organización seleccionada.
                     </p>
 
                 </div>
+
+            </div>
+
+
+            <div class="asignar-usuario">
+
+                <div class="campo">
+
+                    <label for="selectorUsuario">
+                        Usuario disponible
+                    </label>
+
+                    <select id="selectorUsuario">
+
+                        <option value="">
+                            Seleccione un usuario
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    id="btnAsignarUsuario"
+                    class="btnAsignarUsuario"
+                >
+
+                    <i class="fa-solid fa-user-plus"></i>
+
+                    Asociar usuario
+
+                </button>
+
+            </div>
+
+
+            <div
+                id="listaUsuariosOrganizacion"
+                class="lista-usuarios"
+            >
+
+                <p class="sin-usuarios">
+                    Seleccione una organización.
+                </p>
 
             </div>
 
@@ -116,6 +451,7 @@
     </main>
 
     <script src="js/auth-guard.js"></script>
+
     <script src="js/perfil.js"></script>
 
 </body>

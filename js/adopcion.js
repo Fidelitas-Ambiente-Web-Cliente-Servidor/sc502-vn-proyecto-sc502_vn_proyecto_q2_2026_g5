@@ -1,612 +1,1244 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-    let cantonesPorProvincia = {
-        "San José": ["San José", "Escazú", "Desamparados", "Curridabat"],
-        "Alajuela": ["Alajuela", "San Ramón", "Grecia"],
-        "Cartago": ["Cartago", "Paraíso", "Turrialba"],
-        "Heredia": ["Heredia", "Barva", "Santo Domingo"],
-        "Guanacaste": ["Liberia", "Nicoya", "Santa Cruz"],
-        "Puntarenas": ["Puntarenas", "Esparza", "Golfito"],
-        "Limón": ["Limón", "Pococí", "Talamanca"]
-    };
+    const API = "api/adopcion.php";
 
-    let rescatistas = [
-        {
-            id: 1,
-            nombre: "María Fernández",
-            organizacion: "Refugio Patitas Felices",
-            ubicacion: "Escazú, San José",
-            telefono: "8888-1234",
-            correo: "patitasfelices@gmail.com",
-            descripcion: "Refugio sin fines de lucro dedicado al rescate de perros y gatos abandonados desde el 2016. Todos nuestros animales son revisados por un veterinario antes de salir en adopción."
-        },
-        {
-            id: 2,
-            nombre: "Ana Rojas",
-            organizacion: "Asociación Rescate Guanacaste",
-            ubicacion: "Liberia, Guanacaste",
-            telefono: "8777-5566",
-            correo: "rescateguanacaste@hotmail.com",
-            descripcion: "Grupo de voluntarios que atiende animales en situación de calle en la zona de Liberia y Santa Cruz. Trabajamos con esterilización y adopción responsable."
-        },
-        {
-            id: 3,
-            nombre: "Carlos Vindas",
-            organizacion: "Fundación Huellas Solidarias",
-            ubicacion: "Heredia centro",
-            telefono: "8666-9988",
-            correo: "huellassolidarias@gmail.com",
-            descripcion: "Fundación enfocada en el rescate de animales heridos o en abandono en la provincia de Heredia. Contamos con casa hogar temporal para 20 animales."
-        },
-        {
-            id: 4,
-            nombre: "Sor Lucía Araya",
-            organizacion: "Refugio San Francisco de Asís",
-            ubicacion: "Paraíso, Cartago",
-            telefono: "8555-3322",
-            correo: "sanfranciscoasis.cr@gmail.com",
-            descripcion: "Refugio con más de 10 años de experiencia en el cuidado de animales de edad avanzada y con discapacidad."
-        },
-        {
-            id: 5,
-            nombre: "José Solano",
-            organizacion: "Rescate Animal Puntarenas",
-            ubicacion: "Puntarenas centro",
-            telefono: "8444-7711",
-            correo: "rescatepuntarenas@gmail.com",
-            descripcion: "Nos dedicamos al rescate de animales en la zona costera, principalmente perros abandonados en playas y muelles."
-        }
-    ];
-
-    let animales = [
-        { id: 1, nombre: "Firulais", especie: "Perro", raza: "Mestizo", tamano: "Mediano", sexo: "Macho", edad: "2 años", provincia: "San José", canton: "Escazú", distancia: 4, vacunado: true, esterilizado: true, estado: "Disponible", imagen: "https://placedog.net/500/350?id=1", rescatistaId: 1, descripcion: "Firulais es un perro muy juguetón y cariñoso, le encanta pasear y se lleva bien con niños y otros perros." },
-        { id: 2, nombre: "Michi", especie: "Gato", raza: "Siames", tamano: "Pequeño", sexo: "Hembra", edad: "1 año", provincia: "San José", canton: "Curridabat", distancia: 7, vacunado: true, esterilizado: false, estado: "Disponible", imagen: "https://placedog.net/500/350?id=2", rescatistaId: 1, descripcion: "Michi es tranquila y algo tímida al inicio, pero muy cariñosa una vez toma confianza. Ideal para apartamento." },
-        { id: 3, nombre: "Rocky", especie: "Perro", raza: "Labrador", tamano: "Grande", sexo: "Macho", edad: "3 años", provincia: "Heredia", canton: "Heredia", distancia: 12, vacunado: true, esterilizado: true, estado: "Disponible", imagen: "https://placedog.net/500/350?id=3", rescatistaId: 3, descripcion: "Rocky es un perro activo, necesita espacio para correr y familia con experiencia en perros grandes." },
-        { id: 4, nombre: "Luna", especie: "Gato", raza: "Persa", tamano: "Pequeño", sexo: "Hembra", edad: "4 años", provincia: "Heredia", canton: "Santo Domingo", distancia: 15, vacunado: true, esterilizado: true, estado: "En proceso", imagen: "https://placedog.net/500/350?id=4", rescatistaId: 3, descripcion: "Luna es muy tranquila, disfruta dormir en lugares soleados y no le gusta mucho el ruido." },
-        { id: 5, nombre: "Toby", especie: "Perro", raza: "Poodle", tamano: "Pequeño", sexo: "Macho", edad: "5 años", provincia: "Cartago", canton: "Paraíso", distancia: 20, vacunado: true, esterilizado: true, estado: "Disponible", imagen: "https://placedog.net/500/350?id=5", rescatistaId: 4, descripcion: "Toby es un perro adulto muy tranquilo, ideal para personas mayores o familias sin niños pequeños." },
-        { id: 6, nombre: "Nala", especie: "Gato", raza: "Mestizo", tamano: "Mediano", sexo: "Hembra", edad: "8 meses", provincia: "Cartago", canton: "Cartago", distancia: 18, vacunado: false, esterilizado: false, estado: "Disponible", imagen: "https://placedog.net/500/350?id=6", rescatistaId: 4, descripcion: "Nala es una gatita joven, muy activa y curiosa. Se recomienda adoptarla con paciencia para su adaptación." },
-        { id: 7, nombre: "Max", especie: "Perro", raza: "Criollo", tamano: "Grande", sexo: "Macho", edad: "6 años", provincia: "Guanacaste", canton: "Liberia", distancia: 35, vacunado: true, esterilizado: true, estado: "Disponible", imagen: "https://placedog.net/500/350?id=7", rescatistaId: 2, descripcion: "Max fue rescatado de la calle, es un perro noble y protector, ya está totalmente adaptado a la vida en casa." },
-        { id: 8, nombre: "Coco", especie: "Perro", raza: "Chihuahua", tamano: "Pequeño", sexo: "Hembra", edad: "1 año", provincia: "Guanacaste", canton: "Santa Cruz", distancia: 40, vacunado: true, esterilizado: false, estado: "Disponible", imagen: "https://placedog.net/500/350?id=8", rescatistaId: 2, descripcion: "Coco es pequeña pero muy valiente, le encanta estar en brazos y socializa bien con otras mascotas." },
-        { id: 9, nombre: "Simona", especie: "Gato", raza: "Mestizo", tamano: "Mediano", sexo: "Hembra", edad: "2 años", provincia: "Puntarenas", canton: "Puntarenas", distancia: 28, vacunado: true, esterilizado: true, estado: "Disponible", imagen: "https://placedog.net/500/350?id=9", rescatistaId: 5, descripcion: "Simona es cariñosa y le gusta seguir a las personas por la casa, buena con niños." },
-        { id: 10, nombre: "Duke", especie: "Perro", raza: "Pastor Alemán", tamano: "Grande", sexo: "Macho", edad: "4 años", provincia: "Puntarenas", canton: "Golfito", distancia: 45, vacunado: true, esterilizado: true, estado: "En proceso", imagen: "https://placedog.net/500/350?id=10", rescatistaId: 5, descripcion: "Duke es un perro guardián, obediente y ya entrenado en comandos básicos." },
-        { id: 11, nombre: "Pelusa", especie: "Gato", raza: "Angora", tamano: "Pequeño", sexo: "Hembra", edad: "3 años", provincia: "San José", canton: "Desamparados", distancia: 9, vacunado: true, esterilizado: true, estado: "Disponible", imagen: "https://placedog.net/500/350?id=11", rescatistaId: 1, descripcion: "Pelusa necesita cepillado frecuente por su pelaje largo, es muy dócil y cariñosa." },
-        { id: 12, nombre: "Bruno", especie: "Perro", raza: "Beagle", tamano: "Mediano", sexo: "Macho", edad: "2 años", provincia: "Alajuela", canton: "Alajuela", distancia: 22, vacunado: true, esterilizado: false, estado: "Disponible", imagen: "https://placedog.net/500/350?id=12", rescatistaId: 3, descripcion: "Bruno es muy energético, ideal para familias activas que disfruten salir a caminar o correr." },
-        { id: 13, nombre: "Kiara", especie: "Gato", raza: "Siames", tamano: "Pequeño", sexo: "Hembra", edad: "6 meses", provincia: "Alajuela", canton: "Grecia", distancia: 26, vacunado: false, esterilizado: false, estado: "Disponible", imagen: "https://placedog.net/500/350?id=13", rescatistaId: 3, descripcion: "Kiara es una gatita bebé, requiere cuidados especiales y seguimiento con el veterinario." },
-        { id: 14, nombre: "Zeus", especie: "Perro", raza: "Rottweiler", tamano: "Grande", sexo: "Macho", edad: "5 años", provincia: "Limón", canton: "Limón", distancia: 50, vacunado: true, esterilizado: true, estado: "Disponible", imagen: "https://placedog.net/500/350?id=14", rescatistaId: 2, descripcion: "Zeus es un perro grande y tranquilo, se recomienda adoptante con experiencia en razas grandes." }
-    ];
-
+    let animales = [];
     let animalSeleccionadoId = null;
-    let solicitudesEnviadas = [];
 
-    let filtroNombre = document.getElementById("filtroNombre");
-    let filtroEspecie = document.getElementById("filtroEspecie");
-    let filtroRaza = document.getElementById("filtroRaza");
-    let filtroTamano = document.getElementById("filtroTamano");
-    let filtroProvincia = document.getElementById("filtroProvincia");
-    let filtroCanton = document.getElementById("filtroCanton");
-    let filtroDistancia = document.getElementById("filtroDistancia");
-    let filtroDistanciaValor = document.getElementById("filtroDistanciaValor");
-    let btnLimpiar = document.getElementById("btnLimpiar");
 
-    let contenedorAnimales = document.getElementById("contenedorAnimales");
-    let resultadoConteo = document.getElementById("resultadoConteo");
-    let sinResultados = document.getElementById("sinResultados");
+    // =========================================
+    // ELEMENTOS
+    // =========================================
+
+    const filtroNombre =
+        document.getElementById("filtroNombre");
+
+    const filtroEspecie =
+        document.getElementById("filtroEspecie");
+
+    const filtroRaza =
+        document.getElementById("filtroRaza");
+
+    const filtroTamano =
+        document.getElementById("filtroTamano");
+
+    const btnLimpiar =
+        document.getElementById("btnLimpiar");
+
+    const contenedorAnimales =
+        document.getElementById("contenedorAnimales");
+
+    const resultadoConteo =
+        document.getElementById("resultadoConteo");
+
+    const sinResultados =
+        document.getElementById("sinResultados");
+
+
+
+    cargarAnimales();
+
+
+    async function cargarAnimales() {
+
+        try {
+
+            const respuesta =
+                await fetch(API);
+
+            const resultado =
+                await respuesta.json();
+
+
+            console.log(
+                "Respuesta adopción:",
+                resultado
+            );
+
+
+            if (!resultado.ok) {
+
+                alert(
+                    resultado.mensaje ||
+                    "No se pudieron cargar los animales."
+                );
+
+                return;
+            }
+
+
+            animales =
+                resultado.datos || [];
+
+
+            function poblarSelectRazas() {
+
+                if (!filtroRaza) {
+
+                    console.error(
+                        "No se encontró el elemento #filtroRaza"
+                    );
+
+                    return;
+                }
+
+
+                filtroRaza.innerHTML = `
+        <option value="Todas">
+            Todas
+        </option>
+    `;
+
+
+                const razas = [];
+
+
+                animales.forEach(animal => {
+
+                    if (
+                        animal.raza &&
+                        !razas.includes(animal.raza)
+                    ) {
+
+                        razas.push(
+                            animal.raza
+                        );
+                    }
+
+                });
+
+
+                razas
+                    .sort()
+                    .forEach(nombreRaza => {
+
+                        const opcion =
+                            document.createElement(
+                                "option"
+                            );
+
+
+                        opcion.value =
+                            nombreRaza;
+
+
+                        opcion.textContent =
+                            nombreRaza;
+
+
+                        filtroRaza.appendChild(
+                            opcion
+                        );
+
+                    });
+            }
+
+            poblarEstadisticas();
+
+            renderizarAnimales(animales);
+
+
+        } catch (error) {
+
+            console.error(
+                "Error completo adopción:",
+                error
+            );
+
+            alert(
+                "Error al cargar adopción:\n" +
+                error.message
+            );
+        }
+    }
+
+
 
     function poblarSelectRazas() {
 
-        let razas = [];
+        filtroRaza.innerHTML = `
+            <option value="Todas">
+                Todas
+            </option>
+        `;
 
-        for (let i = 0; i < animales.length; i++) {
-            if (razas.indexOf(animales[i].raza) === -1) {
-                razas.push(animales[i].raza);
+
+        const razas = [];
+
+
+        animales.forEach(animal => {
+
+            if (
+                animal.raza &&
+                !razas.includes(animal.raza)
+            ) {
+
+                razas.push(
+                    animal.raza
+                );
             }
-        }
 
-        razas.sort();
+        });
 
-        for (let i = 0; i < razas.length; i++) {
-            let opcion = document.createElement("option");
-            opcion.value = razas[i];
-            opcion.textContent = razas[i];
-            filtroRaza.appendChild(opcion);
-        }
 
+        razas
+            .sort()
+            .forEach(raza => {
+
+                const opcion =
+                    document.createElement(
+                        "option"
+                    );
+
+
+                opcion.value =
+                    raza;
+
+
+                opcion.textContent =
+                    raza;
+
+
+                filtroRaza.appendChild(
+                    opcion
+                );
+
+            });
     }
 
-    function poblarSelectProvincias() {
-
-        for (let provincia in cantonesPorProvincia) {
-            let opcion = document.createElement("option");
-            opcion.value = provincia;
-            opcion.textContent = provincia;
-            filtroProvincia.appendChild(opcion);
-        }
-
-    }
-
-    function poblarSelectCantones(provincia) {
-
-        filtroCanton.innerHTML = "";
-
-        let opcionTodos = document.createElement("option");
-        opcionTodos.value = "Todos";
-        opcionTodos.textContent = "Todos";
-        filtroCanton.appendChild(opcionTodos);
-
-        if (provincia !== "Todas" && cantonesPorProvincia[provincia]) {
-            let cantones = cantonesPorProvincia[provincia];
-            for (let i = 0; i < cantones.length; i++) {
-                let opcion = document.createElement("option");
-                opcion.value = cantones[i];
-                opcion.textContent = cantones[i];
-                filtroCanton.appendChild(opcion);
-            }
-        }
-
-    }
-
-    function obtenerRescatista(id) {
-        for (let i = 0; i < rescatistas.length; i++) {
-            if (rescatistas[i].id === id) {
-                return rescatistas[i];
-            }
-        }
-        return null;
-    }
 
     function crearTarjetaAnimal(animal) {
 
-        let tarjeta = document.createElement("div");
-        tarjeta.className = "card cardAnimal";
+        const tarjeta =
+            document.createElement("div");
 
-        let foto = document.createElement("img");
-        foto.className = "foto";
-        foto.src = animal.imagen;
-        foto.alt = animal.nombre;
+        tarjeta.className =
+            "card cardAnimal";
 
-        let nombre = document.createElement("h3");
-        nombre.textContent = animal.nombre;
 
-        let razaEdad = document.createElement("p");
-        razaEdad.className = "datosAnimal";
-        razaEdad.textContent = animal.raza + " • " + animal.edad + " • " + animal.tamano;
+        const foto =
+            document.createElement("img");
 
-        let ubicacion = document.createElement("p");
-        ubicacion.className = "datosAnimal";
-        ubicacion.textContent = animal.canton + ", " + animal.provincia + " (" + animal.distancia + " km)";
+        foto.className =
+            "foto";
 
-        let estado = document.createElement("span");
-        estado.className = animal.estado === "Disponible" ? "estadoBadge estadoDisponible" : "estadoBadge estadoProceso";
-        estado.textContent = animal.estado;
 
-        let boton = document.createElement("button");
-        boton.type = "button";
-        boton.textContent = "Ver perfil";
-        boton.setAttribute("data-id", animal.id);
+        foto.src =
+            animal.foto ||
+            "https://placehold.co/500x350?text=Sin+foto";
+
+
+        foto.alt =
+            animal.nombre;
+
+
+        const nombre =
+            document.createElement("h3");
+
+        nombre.textContent =
+            animal.nombre;
+
+
+        const razaEdad =
+            document.createElement("p");
+
+        razaEdad.className =
+            "datosAnimal";
+
+
+        razaEdad.textContent =
+            [
+                animal.raza || "Sin raza",
+                animal.edad_aproximada
+                    ? animal.edad_aproximada + " años"
+                    : "Edad no indicada",
+                animal.tamano || "Tamaño no indicado"
+            ].join(" • ");
+
+
+        const ubicacion =
+            document.createElement("p");
+
+        ubicacion.className =
+            "datosAnimal";
+
+
+        ubicacion.textContent =
+            animal.organizacion_canton ||
+            animal.responsable_canton ||
+            "Ubicación no indicada";
+
+
+        const estado =
+            document.createElement("span");
+
+        estado.className =
+            "estadoBadge estadoDisponible";
+
+        estado.textContent =
+            animal.estado;
+
+
+        const boton =
+            document.createElement("button");
+
+        boton.type =
+            "button";
+
+        boton.textContent =
+            "Ver perfil";
+
+        boton.dataset.id =
+            animal.id_mascota;
+
 
         tarjeta.appendChild(foto);
+
         tarjeta.appendChild(nombre);
+
         tarjeta.appendChild(razaEdad);
+
         tarjeta.appendChild(ubicacion);
+
         tarjeta.appendChild(estado);
+
         tarjeta.appendChild(boton);
 
-        return tarjeta;
 
+        return tarjeta;
     }
+
+
 
     function renderizarAnimales(lista) {
 
-        contenedorAnimales.innerHTML = "";
+        contenedorAnimales.innerHTML =
+            "";
 
-        document.getElementById("statResultados").textContent = lista.length;
 
-        if (lista.length === 0) {
-            sinResultados.textContent = "No se encontraron animales con los filtros seleccionados.";
-            resultadoConteo.textContent = "";
+        document.getElementById(
+            "statResultados"
+        ).textContent =
+            lista.length;
+
+
+        if (
+            lista.length === 0
+        ) {
+
+            sinResultados.textContent =
+                "No se encontraron animales con los filtros seleccionados.";
+
+
+            resultadoConteo.textContent =
+                "";
+
+
             return;
         }
 
-        sinResultados.textContent = "";
-        resultadoConteo.textContent = "Se encontraron " + lista.length + " animales.";
 
-        for (let i = 0; i < lista.length; i++) {
-            contenedorAnimales.appendChild(crearTarjetaAnimal(lista[i]));
-        }
+        sinResultados.textContent =
+            "";
 
+
+        resultadoConteo.textContent =
+            "Se encontraron " +
+            lista.length +
+            " animales.";
+
+
+        lista.forEach(animal => {
+
+            contenedorAnimales.appendChild(
+                crearTarjetaAnimal(animal)
+            );
+
+        });
     }
 
     function aplicarFiltros() {
 
-        let nombre = filtroNombre.value.toLowerCase().trim();
-        let especie = filtroEspecie.value;
-        let raza = filtroRaza.value;
-        let tamano = filtroTamano.value;
-        let provincia = filtroProvincia.value;
-        let canton = filtroCanton.value;
-        let distanciaMax = parseInt(filtroDistancia.value);
+        const nombre =
+            filtroNombre.value
+                .toLowerCase()
+                .trim();
 
-        let resultado = animales.filter(function (animal) {
 
-            if (nombre !== "" && animal.nombre.toLowerCase().indexOf(nombre) === -1) {
-                return false;
-            }
-            if (especie !== "Todas" && animal.especie !== especie) {
-                return false;
-            }
-            if (raza !== "Todas" && animal.raza !== raza) {
-                return false;
-            }
-            if (tamano !== "Todos" && animal.tamano !== tamano) {
-                return false;
-            }
-            if (provincia !== "Todas" && animal.provincia !== provincia) {
-                return false;
-            }
-            if (canton !== "Todos" && animal.canton !== canton) {
-                return false;
-            }
-            if (animal.distancia > distanciaMax) {
-                return false;
-            }
+        const especie =
+            filtroEspecie.value;
 
-            return true;
 
-        });
+        const raza =
+            filtroRaza.value;
 
-        renderizarAnimales(resultado);
 
+        const tamano =
+            filtroTamano.value;
+
+
+        const resultado =
+            animales.filter(
+                animal => {
+
+                    if (
+                        nombre !== "" &&
+                        !(animal.nombre || "")
+                            .toLowerCase()
+                            .includes(nombre)
+                    ) {
+
+                        return false;
+                    }
+
+
+                    if (
+                        especie !== "Todas" &&
+                        animal.especie !== especie
+                    ) {
+
+                        return false;
+                    }
+
+
+                    if (
+                        raza !== "Todas" &&
+                        animal.raza !== raza
+                    ) {
+
+                        return false;
+                    }
+
+
+                    if (
+                        tamano !== "Todos" &&
+                        animal.tamano !== tamano
+                    ) {
+
+                        return false;
+                    }
+
+
+                    return true;
+                }
+            );
+
+
+        renderizarAnimales(
+            resultado
+        );
     }
+
 
     function limpiarFiltros() {
 
-        filtroNombre.value = "";
-        filtroEspecie.value = "Todas";
-        filtroRaza.value = "Todas";
-        filtroTamano.value = "Todos";
-        filtroProvincia.value = "Todas";
-        poblarSelectCantones("Todas");
-        filtroDistancia.value = 60;
-        filtroDistanciaValor.textContent = "60 km";
+        filtroNombre.value =
+            "";
 
-        renderizarAnimales(animales);
+        filtroEspecie.value =
+            "Todas";
 
+        filtroRaza.value =
+            "Todas";
+
+        filtroTamano.value =
+            "Todos";
+
+
+        renderizarAnimales(
+            animales
+        );
     }
+
 
     function mostrarVista(idVista) {
 
-        let vistas = document.querySelectorAll(".vista");
+        const vistas =
+            document.querySelectorAll(
+                ".vista"
+            );
 
-        for (let i = 0; i < vistas.length; i++) {
-            vistas[i].classList.add("oculto");
-        }
 
-        document.getElementById(idVista).classList.remove("oculto");
+        vistas.forEach(vista => {
 
-        window.scrollTo(0, 0);
+            vista.classList.add(
+                "oculto"
+            );
 
+        });
+
+
+        document
+            .getElementById(idVista)
+            .classList
+            .remove("oculto");
+
+
+        window.scrollTo(
+            0,
+            0
+        );
     }
+
 
     function mostrarPerfil(idAnimal) {
 
-        let animal = null;
+        const animal =
+            animales.find(
+                animal =>
+                    Number(
+                        animal.id_mascota
+                    ) ===
+                    Number(idAnimal)
+            );
 
-        for (let i = 0; i < animales.length; i++) {
-            if (animales[i].id === idAnimal) {
-                animal = animales[i];
-            }
-        }
 
-        if (animal === null) {
+        if (!animal) {
+
             return;
         }
 
-        animalSeleccionadoId = animal.id;
 
-        let foto = document.getElementById("perfilFoto");
-        foto.src = animal.imagen;
-        foto.alt = animal.nombre;
+        animalSeleccionadoId =
+            animal.id_mascota;
 
-        document.getElementById("perfilNombre").textContent = animal.nombre;
 
-        let estadoSpan = document.getElementById("perfilEstado");
-        estadoSpan.textContent = animal.estado;
-        estadoSpan.className = animal.estado === "Disponible" ? "estadoBadge estadoDisponible" : "estadoBadge estadoProceso";
+        const perfilFoto =
+            document.getElementById(
+                "perfilFoto"
+            );
 
-        document.getElementById("perfilEspecieRaza").textContent = animal.especie + " • " + animal.raza;
-        document.getElementById("perfilEdad").textContent = animal.edad;
-        document.getElementById("perfilSexo").textContent = animal.sexo;
-        document.getElementById("perfilTamano").textContent = animal.tamano;
-        document.getElementById("perfilUbicacion").textContent = animal.canton + ", " + animal.provincia;
-        document.getElementById("perfilDistancia").textContent = animal.distancia + " km de tu ubicación";
-        document.getElementById("perfilVacunado").textContent = animal.vacunado ? "Sí" : "No";
-        document.getElementById("perfilEsterilizado").textContent = animal.esterilizado ? "Sí" : "No";
-        document.getElementById("perfilDescripcion").textContent = animal.descripcion;
 
-        let rescatista = obtenerRescatista(animal.rescatistaId);
+        perfilFoto.src =
+            animal.foto ||
+            "https://placehold.co/500x350?text=Sin+foto";
 
-        if (rescatista !== null) {
 
-            document.getElementById("rescatistaNombre").textContent = rescatista.nombre;
-            document.getElementById("rescatistaOrg").textContent = rescatista.organizacion;
-            document.getElementById("rescatistaUbicacion").textContent = rescatista.ubicacion;
-            document.getElementById("rescatistaTelefono").textContent = rescatista.telefono;
-            document.getElementById("rescatistaCorreo").textContent = rescatista.correo;
-            document.getElementById("rescatistaDescripcion").textContent = rescatista.descripcion;
+        perfilFoto.alt =
+            animal.nombre;
 
-            let otrosAnimales = animales.filter(function (a) {
-                return a.rescatistaId === rescatista.id && a.id !== animal.id;
-            });
 
-            document.getElementById("rescatistaOtrosAnimales").textContent = "Este rescatista tiene " + otrosAnimales.length + " animal(es) más publicados para adopción.";
+        document.getElementById(
+            "perfilNombre"
+        ).textContent =
+            animal.nombre;
 
-        }
 
-        mostrarVista("vistaPerfil");
+        const estadoSpan =
+            document.getElementById(
+                "perfilEstado"
+            );
 
+
+        estadoSpan.textContent =
+            animal.estado;
+
+
+        estadoSpan.className =
+            "estadoBadge estadoDisponible";
+
+
+        document.getElementById(
+            "perfilEspecieRaza"
+        ).textContent =
+            `${animal.especie} • ${animal.raza || "Sin raza"}`;
+
+
+        document.getElementById(
+            "perfilEdad"
+        ).textContent =
+            animal.edad_aproximada
+                ? animal.edad_aproximada + " años"
+                : "No indicada";
+
+
+        document.getElementById(
+            "perfilSexo"
+        ).textContent =
+            animal.sexo ||
+            "No indicado";
+
+
+        document.getElementById(
+            "perfilTamano"
+        ).textContent =
+            animal.tamano ||
+            "No indicado";
+
+
+        document.getElementById(
+            "perfilUbicacion"
+        ).textContent =
+            animal.organizacion_canton ||
+            animal.responsable_canton ||
+            "No indicada";
+
+
+        document.getElementById(
+            "perfilVacunado"
+        ).textContent =
+            animal.vacunas ||
+            "No indicado";
+
+        document.getElementById(
+            "perfilEstadoSalud"
+        ).textContent =
+            animal.estado_salud ||
+            "No indicado";
+
+
+        document.getElementById(
+            "perfilDescripcion"
+        ).textContent =
+            animal.descripcion ||
+            "Sin descripción";
+
+
+
+
+        const nombreResponsable =
+            `${animal.responsable_nombre || ""} ${animal.responsable_apellido || ""}`
+                .trim();
+
+
+        document.getElementById(
+            "rescatistaNombre"
+        ).textContent =
+            nombreResponsable ||
+            "Responsable";
+
+
+        document.getElementById(
+            "rescatistaOrg"
+        ).textContent =
+            animal.organizacion_nombre ||
+            animal.responsable_rol ||
+            "Particular";
+
+
+        document.getElementById(
+            "rescatistaUbicacion"
+        ).textContent =
+            animal.organizacion_canton ||
+            animal.responsable_canton ||
+            "No indicada";
+
+
+        document.getElementById(
+            "rescatistaTelefono"
+        ).textContent =
+            animal.organizacion_telefono ||
+            animal.responsable_telefono ||
+            "No indicado";
+
+
+        document.getElementById(
+            "rescatistaCorreo"
+        ).textContent =
+            animal.organizacion_correo ||
+            animal.responsable_correo ||
+            "No indicado";
+
+
+        document.getElementById(
+            "rescatistaDescripcion"
+        ).textContent =
+            animal.organizacion_nombre
+                ? `${animal.organizacion_tipo || "Organización"} responsable de la publicación.`
+                : "Usuario responsable de la publicación de esta mascota.";
+
+
+        const otrosAnimales =
+            animales.filter(
+                otro =>
+                    otro.id_usuario ===
+                    animal.id_usuario &&
+                    otro.id_mascota !==
+                    animal.id_mascota
+            );
+
+
+        document.getElementById(
+            "rescatistaOtrosAnimales"
+        ).textContent =
+            "Este responsable tiene " +
+            otrosAnimales.length +
+            " animal(es) más publicados para adopción.";
+
+
+        mostrarVista(
+            "vistaPerfil"
+        );
     }
 
-    filtroNombre.addEventListener("input", aplicarFiltros);
-    filtroEspecie.addEventListener("change", aplicarFiltros);
-    filtroRaza.addEventListener("change", aplicarFiltros);
-    filtroTamano.addEventListener("change", aplicarFiltros);
 
-    filtroProvincia.addEventListener("change", function () {
-        poblarSelectCantones(filtroProvincia.value);
-        aplicarFiltros();
-    });
 
-    filtroCanton.addEventListener("change", aplicarFiltros);
+    filtroNombre.addEventListener(
+        "input",
+        aplicarFiltros
+    );
 
-    filtroDistancia.addEventListener("input", function () {
-        filtroDistanciaValor.textContent = filtroDistancia.value + " km";
-        aplicarFiltros();
-    });
 
-    btnLimpiar.addEventListener("click", limpiarFiltros);
+    filtroEspecie.addEventListener(
+        "change",
+        aplicarFiltros
+    );
 
-    contenedorAnimales.addEventListener("click", function (evento) {
-        if (evento.target.tagName === "BUTTON") {
-            let idAnimal = parseInt(evento.target.getAttribute("data-id"));
-            mostrarPerfil(idAnimal);
-        }
-    });
 
-    document.getElementById("btnVolverBusqueda").addEventListener("click", function () {
-        mostrarVista("vistaBusqueda");
-    });
+    filtroRaza.addEventListener(
+        "change",
+        aplicarFiltros
+    );
 
-    document.getElementById("btnVolverPerfil").addEventListener("click", function () {
-        mostrarVista("vistaPerfil");
-    });
 
-    document.getElementById("btnSolicitarAdopcion").addEventListener("click", function () {
+    filtroTamano.addEventListener(
+        "change",
+        aplicarFiltros
+    );
 
-        let animal = null;
 
-        for (let i = 0; i < animales.length; i++) {
-            if (animales[i].id === animalSeleccionadoId) {
-                animal = animales[i];
+    btnLimpiar.addEventListener(
+        "click",
+        limpiarFiltros
+    );
+
+
+    contenedorAnimales.addEventListener(
+        "click",
+        function (evento) {
+
+            const boton =
+                evento.target.closest(
+                    "button[data-id]"
+                );
+
+
+            if (!boton) {
+
+                return;
             }
+
+
+            mostrarPerfil(
+                Number(
+                    boton.dataset.id
+                )
+            );
         }
+    );
 
-        if (animal !== null) {
-            document.getElementById("solicitudAnimalNombre").textContent = animal.nombre;
+
+
+    document.getElementById(
+        "btnVolverBusqueda"
+    ).addEventListener(
+        "click",
+        function () {
+
+            mostrarVista(
+                "vistaBusqueda"
+            );
         }
+    );
 
-        mostrarVista("vistaSolicitud");
 
-    });
+    document.getElementById(
+        "btnVolverPerfil"
+    ).addEventListener(
+        "click",
+        function () {
 
-    /* ---------- Formulario de solicitud de adopción ---------- */
+            mostrarVista(
+                "vistaPerfil"
+            );
+        }
+    );
 
-    let solNombre = document.getElementById("solNombre");
-    let solCedula = document.getElementById("solCedula");
-    let solTelefono = document.getElementById("solTelefono");
-    let solCorreo = document.getElementById("solCorreo");
-    let solDireccion = document.getElementById("solDireccion");
-    let solVivienda = document.getElementById("solVivienda");
-    let solMotivo = document.getElementById("solMotivo");
-    let solOtrasMascotas = document.getElementById("solOtrasMascotas");
-    let solVisita = document.getElementById("solVisita");
 
-    let errorSolNombre = document.getElementById("errorSolNombre");
-    let errorSolCedula = document.getElementById("errorSolCedula");
-    let errorSolTelefono = document.getElementById("errorSolTelefono");
-    let errorSolCorreo = document.getElementById("errorSolCorreo");
-    let errorSolDireccion = document.getElementById("errorSolDireccion");
-    let errorSolVivienda = document.getElementById("errorSolVivienda");
-    let errorSolMotivo = document.getElementById("errorSolMotivo");
-    let errorSolVisita = document.getElementById("errorSolVisita");
 
-    let btnEnviarSolicitud = document.getElementById("btnEnviarSolicitud");
-    let mensajeSolicitud = document.getElementById("mensajeSolicitud");
-    let contenedorSolicitudes = document.getElementById("contenedorSolicitudes");
+    document.getElementById(
+        "btnSolicitarAdopcion"
+    ).addEventListener(
+        "click",
+        function () {
 
-    function esNumerico(texto) {
-        return /^[0-9]+$/.test(texto);
-    }
+            const animal =
+                animales.find(
+                    animal =>
+                        Number(
+                            animal.id_mascota
+                        ) ===
+                        Number(
+                            animalSeleccionadoId
+                        )
+                );
+
+
+            if (animal) {
+
+                document.getElementById(
+                    "solicitudAnimalNombre"
+                ).textContent =
+                    animal.nombre;
+            }
+
+
+            mostrarVista(
+                "vistaSolicitud"
+            );
+
+
+            cargarMisSolicitudes();
+        }
+    );
+
+
+
+    const solNombre =
+        document.getElementById(
+            "solNombre"
+        );
+
+    const solCedula =
+        document.getElementById(
+            "solCedula"
+        );
+
+    const solTelefono =
+        document.getElementById(
+            "solTelefono"
+        );
+
+    const solCorreo =
+        document.getElementById(
+            "solCorreo"
+        );
+
+    const solDireccion =
+        document.getElementById(
+            "solDireccion"
+        );
+
+    const solVivienda =
+        document.getElementById(
+            "solVivienda"
+        );
+
+    const solMotivo =
+        document.getElementById(
+            "solMotivo"
+        );
+
+    const solOtrasMascotas =
+        document.getElementById(
+            "solOtrasMascotas"
+        );
+
+    const solVisita =
+        document.getElementById(
+            "solVisita"
+        );
+
+    const btnEnviarSolicitud =
+        document.getElementById(
+            "btnEnviarSolicitud"
+        );
+
+    const mensajeSolicitud =
+        document.getElementById(
+            "mensajeSolicitud"
+        );
+
 
     function validarSolicitud() {
 
-        let nombre = solNombre.value.trim();
-        let cedula = solCedula.value.trim();
-        let telefono = solTelefono.value.trim();
-        let correo = solCorreo.value.trim();
-        let direccion = solDireccion.value.trim();
-        let vivienda = solVivienda.value;
-        let motivo = solMotivo.value.trim();
-
         let valido = true;
 
-        if (nombre.length < 3) {
-            errorSolNombre.textContent = "Ingrese su nombre completo";
-            errorSolNombre.style.color = "red";
+
+        if (
+            solNombre.value
+                .trim()
+                .length < 3
+        ) {
+
             valido = false;
-        } else {
-            errorSolNombre.textContent = "";
         }
 
-        if (cedula.length !== 9 || !esNumerico(cedula)) {
-            errorSolCedula.textContent = "La cédula debe tener 9 dígitos";
-            errorSolCedula.style.color = "red";
+
+        if (
+            !/^[0-9]{9}$/.test(
+                solCedula.value.trim()
+            )
+        ) {
+
             valido = false;
-        } else {
-            errorSolCedula.textContent = "";
         }
 
-        if (telefono.length !== 8 || !esNumerico(telefono)) {
-            errorSolTelefono.textContent = "El teléfono debe tener 8 dígitos";
-            errorSolTelefono.style.color = "red";
+
+        if (
+            !/^[0-9]{8}$/.test(
+                solTelefono.value.trim()
+            )
+        ) {
+
             valido = false;
-        } else {
-            errorSolTelefono.textContent = "";
         }
 
-        if (correo.indexOf("@") === -1 || correo.indexOf(".") === -1) {
-            errorSolCorreo.textContent = "Ingrese un correo válido";
-            errorSolCorreo.style.color = "red";
+
+        if (
+            !solCorreo.value.includes("@")
+        ) {
+
             valido = false;
-        } else {
-            errorSolCorreo.textContent = "";
         }
 
-        if (direccion.length < 10) {
-            errorSolDireccion.textContent = "Describa la dirección con más detalle";
-            errorSolDireccion.style.color = "red";
+
+        if (
+            solDireccion.value
+                .trim()
+                .length < 10
+        ) {
+
             valido = false;
-        } else {
-            errorSolDireccion.textContent = "";
         }
 
-        if (vivienda === "") {
-            errorSolVivienda.textContent = "Seleccione un tipo de vivienda";
-            errorSolVivienda.style.color = "red";
+
+        if (
+            solVivienda.value === ""
+        ) {
+
             valido = false;
-        } else {
-            errorSolVivienda.textContent = "";
         }
 
-        if (motivo.length < 20) {
-            errorSolMotivo.textContent = "Explique su motivo con al menos 20 caracteres";
-            errorSolMotivo.style.color = "red";
+
+        if (
+            solMotivo.value
+                .trim()
+                .length < 20
+        ) {
+
             valido = false;
-        } else {
-            errorSolMotivo.textContent = "";
         }
 
-        if (!solVisita.checked) {
-            errorSolVisita.textContent = "Debe aceptar la visita domiciliaria";
-            errorSolVisita.style.color = "red";
+
+        if (
+            !solVisita.checked
+        ) {
+
             valido = false;
-        } else {
-            errorSolVisita.textContent = "";
         }
 
-        btnEnviarSolicitud.disabled = !valido;
 
+        btnEnviarSolicitud.disabled =
+            !valido;
     }
 
-    solNombre.addEventListener("input", validarSolicitud);
-    solCedula.addEventListener("input", validarSolicitud);
-    solTelefono.addEventListener("input", validarSolicitud);
-    solCorreo.addEventListener("input", validarSolicitud);
-    solDireccion.addEventListener("input", validarSolicitud);
-    solVivienda.addEventListener("change", validarSolicitud);
-    solMotivo.addEventListener("input", validarSolicitud);
-    solVisita.addEventListener("change", validarSolicitud);
 
-    btnEnviarSolicitud.addEventListener("click", function () {
+    [
+        solNombre,
+        solCedula,
+        solTelefono,
+        solCorreo,
+        solDireccion,
+        solVivienda,
+        solMotivo,
+        solVisita
 
-        let animal = null;
+    ].forEach(elemento => {
 
-        for (let i = 0; i < animales.length; i++) {
-            if (animales[i].id === animalSeleccionadoId) {
-                animal = animales[i];
-            }
-        }
+        elemento.addEventListener(
+            "input",
+            validarSolicitud
+        );
 
-        let hoy = new Date();
-        let fecha = hoy.getDate() + "/" + (hoy.getMonth() + 1) + "/" + hoy.getFullYear();
-
-        let tarjeta = document.createElement("div");
-        tarjeta.className = "tarjetaSolicitud";
-
-        let titulo = document.createElement("h4");
-        titulo.textContent = "Solicitud para " + (animal !== null ? animal.nombre : "");
-
-        let solicitante = document.createElement("p");
-        solicitante.textContent = "Solicitante: " + solNombre.value.trim();
-
-        let contacto = document.createElement("p");
-        contacto.textContent = "Contacto: " + solTelefono.value.trim() + " / " + solCorreo.value.trim();
-
-        let fechaP = document.createElement("p");
-        fechaP.textContent = "Fecha de envío: " + fecha;
-
-        let estadoP = document.createElement("p");
-        estadoP.textContent = "Estado: En revisión por el rescatista";
-
-        tarjeta.appendChild(titulo);
-        tarjeta.appendChild(solicitante);
-        tarjeta.appendChild(contacto);
-        tarjeta.appendChild(fechaP);
-        tarjeta.appendChild(estadoP);
-
-        contenedorSolicitudes.appendChild(tarjeta);
-
-        solicitudesEnviadas.push({
-            animal: animal !== null ? animal.nombre : "",
-            solicitante: solNombre.value.trim(),
-            fecha: fecha
-        });
-
-        mensajeSolicitud.textContent = "¡Solicitud enviada correctamente! El rescatista se pondrá en contacto pronto.";
-        mensajeSolicitud.style.color = "green";
-
-        solNombre.value = "";
-        solCedula.value = "";
-        solTelefono.value = "";
-        solCorreo.value = "";
-        solDireccion.value = "";
-        solVivienda.value = "";
-        solMotivo.value = "";
-        solOtrasMascotas.checked = false;
-        solVisita.checked = false;
-
-        errorSolNombre.textContent = "";
-        errorSolCedula.textContent = "";
-        errorSolTelefono.textContent = "";
-        errorSolCorreo.textContent = "";
-        errorSolDireccion.textContent = "";
-        errorSolVivienda.textContent = "";
-        errorSolMotivo.textContent = "";
-        errorSolVisita.textContent = "";
-
-        btnEnviarSolicitud.disabled = true;
-
-        setTimeout(function () {
-            mensajeSolicitud.textContent = "";
-        }, 3000);
+        elemento.addEventListener(
+            "change",
+            validarSolicitud
+        );
 
     });
 
-    function poblarEstadisticas() {
 
-        let disponibles = animales.filter(function (animal) {
-            return animal.estado === "Disponible";
-        });
+    btnEnviarSolicitud.addEventListener(
+        "click",
+        enviarSolicitud
+    );
 
-        document.getElementById("statTotal").textContent = animales.length;
-        document.getElementById("statDisponibles").textContent = disponibles.length;
-        document.getElementById("statRescatistas").textContent = rescatistas.length;
 
+    async function enviarSolicitud() {
+
+        validarSolicitud();
+
+
+        if (
+            btnEnviarSolicitud.disabled
+        ) {
+
+            return;
+        }
+
+
+        const datos = {
+
+            id_mascota:
+                animalSeleccionadoId,
+
+            nombre:
+                solNombre.value.trim(),
+
+            cedula:
+                solCedula.value.trim(),
+
+            telefono:
+                solTelefono.value.trim(),
+
+            correo:
+                solCorreo.value.trim(),
+
+            direccion:
+                solDireccion.value.trim(),
+
+            vivienda:
+                solVivienda.value,
+
+            motivo:
+                solMotivo.value.trim(),
+
+            otras_mascotas:
+                solOtrasMascotas.checked,
+
+            acepta_visita:
+                solVisita.checked
+        };
+
+
+        try {
+
+            const respuesta =
+                await fetch(
+                    API,
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body:
+                            JSON.stringify(
+                                datos
+                            )
+                    }
+                );
+
+
+            const resultado =
+                await respuesta.json();
+
+
+            console.log(
+                "Solicitud:",
+                resultado
+            );
+
+
+            if (!resultado.ok) {
+
+                mensajeSolicitud.textContent =
+                    resultado.mensaje ||
+                    "No se pudo enviar la solicitud";
+
+
+                mensajeSolicitud.style.color =
+                    "#DC2626";
+
+
+                return;
+            }
+
+
+            mensajeSolicitud.textContent =
+                resultado.mensaje;
+
+
+            mensajeSolicitud.style.color =
+                "#15803D";
+
+
+            document.getElementById(
+                "formularioSolicitud"
+            ).reset();
+
+
+            btnEnviarSolicitud.disabled =
+                true;
+
+
+            await cargarMisSolicitudes();
+
+
+        } catch (error) {
+
+            console.error(
+                "Error:",
+                error
+            );
+
+
+            mensajeSolicitud.textContent =
+                "Error al comunicarse con la API.";
+
+
+            mensajeSolicitud.style.color =
+                "#DC2626";
+
+        }
     }
 
-    poblarSelectRazas();
-    poblarSelectProvincias();
-    poblarSelectCantones("Todas");
-    poblarEstadisticas();
-    renderizarAnimales(animales);
+
+    async function cargarMisSolicitudes() {
+
+        try {
+
+            const respuesta =
+                await fetch(
+                    `${API}?accion=mis-solicitudes`
+                );
+
+
+            const resultado =
+                await respuesta.json();
+
+
+            if (!resultado.ok) {
+
+                return;
+            }
+
+
+            const contenedor =
+                document.getElementById(
+                    "contenedorSolicitudes"
+                );
+
+
+            contenedor.innerHTML =
+                "";
+
+
+            if (
+                resultado.datos.length === 0
+            ) {
+
+                contenedor.innerHTML =
+                    "<p>No hay solicitudes enviadas.</p>";
+
+
+                return;
+            }
+
+
+            resultado.datos.forEach(
+                solicitud => {
+
+                    contenedor.innerHTML += `
+
+                        <div class="tarjetaSolicitud">
+
+                            <h4>
+                                Solicitud para
+                                ${solicitud.mascota}
+                            </h4>
+
+                            <p>
+                                Fecha:
+                                ${formatearFecha(
+                        solicitud.fecha_solicitud
+                    )}
+                            </p>
+
+                            <p>
+                                Estado:
+                                ${solicitud.estado}
+                            </p>
+
+                        </div>
+
+                    `;
+
+                }
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Error solicitudes:",
+                error
+            );
+
+        }
+    }
+
+    function poblarEstadisticas() {
+
+        document.getElementById(
+            "statTotal"
+        ).textContent =
+            animales.length;
+
+
+        document.getElementById(
+            "statDisponibles"
+        ).textContent =
+            animales.filter(
+                animal =>
+                    animal.estado ===
+                    "Disponible"
+            ).length;
+
+
+        const responsables =
+            new Set(
+                animales.map(
+                    animal =>
+                        animal.id_usuario
+                )
+            );
+
+
+        document.getElementById(
+            "statRescatistas"
+        ).textContent =
+            responsables.size;
+    }
+
+
+    function formatearFecha(fecha) {
+
+        if (!fecha) {
+
+            return "No indicada";
+        }
+
+
+        const fechaJS =
+            new Date(
+                fecha.replace(
+                    " ",
+                    "T"
+                )
+            );
+
+
+        return fechaJS.toLocaleString(
+            "es-CR",
+            {
+                dateStyle: "medium",
+                timeStyle: "short"
+            }
+        );
+    }
 
 });

@@ -1,189 +1,764 @@
 const API = "api/solicitudes.php";
 
-const contenedor = document.getElementById("contenedorSolicitudes");
-
 let solicitudes = [];
 
-
-// =========================================
-// CLASE CSS SEGÚN ESTADO
-// =========================================
-
-const CLASE_ESTADO = {
-    "Pendiente": "pendiente",
-    "En revisión": "en-revision",
-    "Aprobada": "aprobada",
-    "Rechazada": "rechazada",
-    "Completada": "completada",
-    "Cancelada": "cancelada"
-};
+const contenedor =
+    document.getElementById("contenedorSolicitudes");
 
 
-// =========================================
-// INICIAR
-// =========================================
 
 cargarSolicitudes();
 
 
-// =========================================
-// CARGAR SOLICITUDES RECIBIDAS
-// (las que otros usuarios enviaron por
-// animales que YO registré)
-// =========================================
-
 async function cargarSolicitudes() {
-
-    contenedor.innerHTML = "<p>Cargando solicitudes...</p>";
 
     try {
 
-        const respuesta = await fetch(`${API}?tipo=recibidas`);
+        const respuesta =
+            await fetch(API);
 
-        const resultado = await respuesta.json();
+
+        const resultado =
+            await respuesta.json();
+
+
+        console.log(
+            "Respuesta solicitudes:",
+            resultado
+        );
+
 
         if (!resultado.ok) {
 
-            contenedor.innerHTML = "<p>No se pudieron cargar las solicitudes.</p>";
-            return;
+            alert(
+                resultado.mensaje ||
+                "No se pudieron cargar las solicitudes."
+            );
 
+            return;
         }
 
-        solicitudes = resultado.datos;
 
-        mostrar();
+        solicitudes =
+            resultado.datos || [];
+
+
+        mostrarSolicitudes();
+
 
     } catch (error) {
 
-        contenedor.innerHTML = "<p>No se pudo conectar con el servidor.</p>";
+        console.error(
+            "Error:",
+            error
+        );
+
+
+        alert(
+            "No fue posible conectar con la API de solicitudes."
+        );
 
     }
-
 }
 
 
-// =========================================
-// PINTAR TARJETAS
-// =========================================
 
-function mostrar() {
+function mostrarSolicitudes() {
 
     contenedor.innerHTML = "";
 
+
     if (solicitudes.length === 0) {
 
-        contenedor.innerHTML = "<p>Todavía no te han enviado solicitudes de adopción.</p>";
-        return;
+        contenedor.innerHTML = `
+            <div class="sin-solicitudes">
 
+                <i class="fa-solid fa-inbox"></i>
+
+                <h3>
+                    No hay solicitudes
+                </h3>
+
+                <p>
+                    Todavía no se han recibido
+                    solicitudes de adopción.
+                </p>
+
+            </div>
+        `;
+
+        return;
     }
 
-    solicitudes.forEach(s => {
 
-        const claseEstado = CLASE_ESTADO[s.estado] || "pendiente";
+    solicitudes.forEach(solicitud => {
 
-        const puedeGestionar = s.estado === "Pendiente" || s.estado === "En revisión";
+        const nombreUsuario =
+            `${solicitud.usuario_nombre || ""}
+             ${solicitud.usuario_apellido || ""}`
+                .trim();
+
+
+
+        const fotoMascota =
+            solicitud.foto
+                ? `
+                    <img
+                        src="${solicitud.foto}"
+                        class="solicitud-foto"
+                        alt="${solicitud.mascota}"
+                    >
+                  `
+                : `
+                    <div class="solicitud-sin-foto">
+
+                        <i class="fa-solid fa-paw"></i>
+
+                    </div>
+                  `;
+
+
+
+        const botones =
+            obtenerBotones(solicitud);
+
+
 
         contenedor.innerHTML += `
 
-        <div class="solicitud">
+            <div class="solicitud-card">
 
-            <h3>${s.solicitante_nombre} ${s.solicitante_apellido}</h3>
 
-            <p><strong>Animal:</strong> ${s.nombre_mascota}</p>
+                <div class="solicitud-imagen">
 
-            <p><strong>Correo:</strong> ${s.solicitante_correo}</p>
+                    ${fotoMascota}
 
-            <p><strong>Teléfono:</strong> ${s.solicitante_telefono ?? "No indicado"}</p>
+                </div>
 
-            <p><strong>Fecha:</strong> ${formatearFecha(s.fecha_solicitud)}</p>
 
-            ${s.observaciones ? `<p><strong>Mensaje:</strong> ${s.observaciones}</p>` : ""}
+                <div class="solicitud-info">
 
-            <span class="estado ${claseEstado}">
-                ${s.estado}
-            </span>
 
-            ${puedeGestionar ? `
-            <div class="botones">
+                    <div class="solicitud-encabezado">
+
+
+                        <div>
+
+                            <span class="solicitud-id">
+
+                                Solicitud #${solicitud.id_solicitud}
+
+                            </span>
+
+
+                            <h2>
+
+                                ${solicitud.mascota}
+
+                            </h2>
+
+                        </div>
+
+
+                        <span
+                            class="estado estado-${claseEstado(
+                                solicitud.estado
+                            )}"
+                        >
+
+                            ${solicitud.estado}
+
+                        </span>
+
+
+                    </div>
+
+
+                    <!-- DATOS -->
+
+                    <div class="datos-grid">
+
+
+                        <div>
+
+                            <span class="dato-titulo">
+
+                                <i class="fa-solid fa-paw"></i>
+
+                                Mascota
+
+                            </span>
+
+
+                            <p>
+
+                                ${solicitud.especie || "No indicada"}
+
+                                ${
+                                    solicitud.raza
+                                        ? " - " + solicitud.raza
+                                        : ""
+                                }
+
+                            </p>
+
+                        </div>
+
+
+                        <div>
+
+                            <span class="dato-titulo">
+
+                                <i class="fa-solid fa-user"></i>
+
+                                Solicitante
+
+                            </span>
+
+
+                            <p>
+
+                                ${nombreUsuario || "No indicado"}
+
+                            </p>
+
+                        </div>
+
+
+                        <div>
+
+                            <span class="dato-titulo">
+
+                                <i class="fa-solid fa-envelope"></i>
+
+                                Correo
+
+                            </span>
+
+
+                            <p>
+
+                                ${solicitud.usuario_correo || "No indicado"}
+
+                            </p>
+
+                        </div>
+
+
+                        <div>
+
+                            <span class="dato-titulo">
+
+                                <i class="fa-solid fa-phone"></i>
+
+                                Teléfono
+
+                            </span>
+
+
+                            <p>
+
+                                ${solicitud.usuario_telefono || "No indicado"}
+
+                            </p>
+
+                        </div>
+
+
+                        <div>
+
+                            <span class="dato-titulo">
+
+                                <i class="fa-solid fa-calendar"></i>
+
+                                Fecha
+
+                            </span>
+
+
+                            <p>
+
+                                ${formatearFecha(
+                                    solicitud.fecha_solicitud
+                                )}
+
+                            </p>
+
+                        </div>
+
+
+                        <div>
+
+                            <span class="dato-titulo">
+
+                                <i class="fa-solid fa-dog"></i>
+
+                                Estado mascota
+
+                            </span>
+
+
+                            <p>
+
+                                ${
+                                    solicitud.estado_mascota ||
+                                    "No indicado"
+                                }
+
+                            </p>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <!-- OBSERVACIONES -->
+
+                    <div class="observaciones">
+
+                        <strong>
+                            Observaciones:
+                        </strong>
+
+                        <p>
+
+                            ${
+                                solicitud.observaciones
+                                    ? formatearObservaciones(
+                                        solicitud.observaciones
+                                      )
+                                    : "Sin observaciones."
+                            }
+
+                        </p>
+
+                    </div>
+
+
+                    ${botones}
+
+
+                </div>
+
+            </div>
+
+        `;
+
+    });
+}
+
+
+
+
+function obtenerBotones(solicitud) {
+
+
+    if (
+        solicitud.estado === "Pendiente"
+    ) {
+
+        return `
+
+            <div class="acciones-solicitud">
+
 
                 <button
-                    class="btnAceptar"
-                    onclick="aceptar(${s.id_solicitud})">
+                    class="btnRevision"
+                    onclick="cambiarEstado(
+                        ${solicitud.id_solicitud},
+                        'En revisión'
+                    )"
+                >
 
-                    Aceptar
+                    <i class="fa-solid fa-eye"></i>
+
+                    Revisar
 
                 </button>
 
+
                 <button
                     class="btnRechazar"
-                    onclick="rechazar(${s.id_solicitud})">
+                    onclick="cambiarEstado(
+                        ${solicitud.id_solicitud},
+                        'Rechazada'
+                    )"
+                >
+
+                    <i class="fa-solid fa-xmark"></i>
 
                     Rechazar
 
                 </button>
 
+
             </div>
             ` : ""}
 
-        </div>
+        `;
+    }
+
+
+    if (
+        solicitud.estado === "En revisión"
+    ) {
+
+        return `
+
+            <div class="acciones-solicitud">
+
+
+                <button
+                    class="btnAprobar"
+                    onclick="cambiarEstado(
+                        ${solicitud.id_solicitud},
+                        'Aprobada'
+                    )"
+                >
+
+                    <i class="fa-solid fa-check"></i>
+
+                    Aprobar
+
+                </button>
+
+
+                <button
+                    class="btnRechazar"
+                    onclick="cambiarEstado(
+                        ${solicitud.id_solicitud},
+                        'Rechazada'
+                    )"
+                >
+
+                    <i class="fa-solid fa-xmark"></i>
+
+                    Rechazar
+
+                </button>
+
+
+            </div>
 
         `;
+    }
 
-    });
 
+
+    if (
+        solicitud.estado === "Aprobada"
+    ) {
+
+        return `
+
+            <div class="acciones-solicitud">
+
+
+                <button
+                    class="btnCompletar"
+                    onclick="cambiarEstado(
+                        ${solicitud.id_solicitud},
+                        'Completada'
+                    )"
+                >
+
+                    <i class="fa-solid fa-heart-circle-check"></i>
+
+                    Completar adopción
+
+                </button>
+
+
+            </div>
+
+        `;
+    }
+
+
+
+    if (
+        solicitud.estado === "Completada"
+    ) {
+
+        return `
+
+            <div class="resultado-solicitud completada">
+
+                <i class="fa-solid fa-circle-check"></i>
+
+                Adopción completada
+
+            </div>
+
+        `;
+    }
+
+
+
+    if (
+        solicitud.estado === "Rechazada"
+    ) {
+
+        return `
+
+            <div class="resultado-solicitud rechazada">
+
+                <i class="fa-solid fa-circle-xmark"></i>
+
+                Solicitud rechazada
+
+            </div>
+
+        `;
+    }
+
+
+    if (
+        solicitud.estado === "Cancelada"
+    ) {
+
+        return `
+
+            <div class="resultado-solicitud cancelada">
+
+                <i class="fa-solid fa-ban"></i>
+
+                Solicitud cancelada
+
+            </div>
+
+        `;
+    }
+
+
+    return "";
 }
 
 
-// =========================================
-// ACEPTAR / RECHAZAR (PUT real)
-// =========================================
 
-async function aceptar(id) {
-    await actualizarEstado(id, "Aprobada");
-}
+async function cambiarEstado(
+    id,
+    nuevoEstado
+) {
 
-async function rechazar(id) {
-    await actualizarEstado(id, "Rechazada");
-}
+    let mensaje = "";
 
-async function actualizarEstado(id, estado) {
 
-    try {
+  
 
-        const respuesta = await fetch(API, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ id, estado })
-        });
+    if (
+        nuevoEstado === "En revisión"
+    ) {
 
-        const resultado = await respuesta.json();
-
-        if (!resultado.ok) {
-            alert(resultado.mensaje);
-            return;
-        }
-
-        cargarSolicitudes();
-
-    } catch (error) {
-
-        alert("No se pudo conectar con el servidor");
+        mensaje =
+            "¿Desea comenzar la revisión de esta solicitud?";
 
     }
 
+
+    else if (
+        nuevoEstado === "Aprobada"
+    ) {
+
+        mensaje =
+            "¿Desea aprobar esta solicitud? " +
+            "La mascota seguirá disponible hasta completar la adopción.";
+
+    }
+
+
+    else if (
+        nuevoEstado === "Rechazada"
+    ) {
+
+        mensaje =
+            "¿Desea rechazar esta solicitud?";
+
+    }
+
+
+    else if (
+        nuevoEstado === "Completada"
+    ) {
+
+        mensaje =
+            "¿Desea completar esta adopción? " +
+            "La mascota será marcada como Adoptado " +
+            "y las demás solicitudes activas serán canceladas.";
+
+    }
+
+
+    if (
+        !confirm(mensaje)
+    ) {
+
+        return;
+    }
+
+
+    try {
+
+        const respuesta =
+            await fetch(
+                API,
+                {
+
+                    method: "PUT",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json"
+
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            id: id,
+
+                            estado:
+                                nuevoEstado
+
+                        })
+
+                }
+            );
+
+
+        const resultado =
+            await respuesta.json();
+
+
+        console.log(
+            "Respuesta actualizar:",
+            resultado
+        );
+
+
+        if (
+            !resultado.ok
+        ) {
+
+            alert(
+                resultado.mensaje ||
+                "No se pudo actualizar la solicitud."
+            );
+
+            return;
+        }
+
+
+        alert(
+            resultado.mensaje
+        );
+
+
+        await cargarSolicitudes();
+
+
+    } catch (error) {
+
+        console.error(
+            "Error:",
+            error
+        );
+
+
+        alert(
+            "Error al actualizar la solicitud."
+        );
+
+    }
 }
 
 
-// =========================================
-// FORMATEAR FECHA (YYYY-MM-DD HH:MM:SS -> DD/MM/YYYY)
-// =========================================
 
-function formatearFecha(fechaSql) {
 
-    const fecha = new Date(fechaSql.replace(" ", "T"));
+function claseEstado(estado) {
 
-    if (isNaN(fecha)) return fechaSql;
+    switch (estado) {
 
-    return fecha.toLocaleDateString("es-CR");
+        case "Pendiente":
+            return "pendiente";
 
+
+        case "En revisión":
+            return "revision";
+
+
+        case "Aprobada":
+            return "aprobada";
+
+
+        case "Rechazada":
+            return "rechazada";
+
+
+        case "Completada":
+            return "completada";
+
+
+        case "Cancelada":
+            return "cancelada";
+
+
+        default:
+            return "pendiente";
+    }
+}
+
+
+
+function formatearObservaciones(
+    observaciones
+) {
+
+    return observaciones
+        .replace(/\n/g, "<br>");
+}
+
+
+
+function formatearFecha(fecha) {
+
+    if (!fecha) {
+
+        return "No indicada";
+    }
+
+
+    const fechaJS =
+        new Date(
+            fecha.replace(
+                " ",
+                "T"
+            )
+        );
+
+
+    if (
+        isNaN(
+            fechaJS.getTime()
+        )
+    ) {
+
+        return fecha;
+    }
+
+
+    return fechaJS.toLocaleString(
+        "es-CR",
+        {
+
+            dateStyle:
+                "medium",
+
+            timeStyle:
+                "short"
+
+        }
+    );
 }

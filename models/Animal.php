@@ -12,10 +12,6 @@ class Animal
     }
 
 
-    // =========================================
-    // OBTENER TODOS LOS ANIMALES
-    // =========================================
-
     public function obtenerTodos()
     {
         $sql = "SELECT
@@ -44,9 +40,7 @@ class Animal
     }
 
 
-    // =========================================
-    // OBTENER ANIMAL
-    // =========================================
+
 
     public function obtenerPorId($id)
     {
@@ -78,9 +72,6 @@ class Animal
     }
 
 
-    // =========================================
-    // CREAR ANIMAL
-    // =========================================
 
     public function crear($datos)
     {
@@ -139,9 +130,6 @@ class Animal
     }
 
 
-    // =========================================
-    // ACTUALIZAR ANIMAL
-    // =========================================
 
     public function actualizar($id, $datos)
     {
@@ -173,9 +161,6 @@ class Animal
         ];
 
 
-        // =========================================
-        // ACTUALIZAR FOTO SI VIENE UNA NUEVA
-        // =========================================
 
         if (
             isset($datos['foto']) &&
@@ -205,10 +190,6 @@ class Animal
         );
     }
 
-
-    // =========================================
-    // ELIMINAR ANIMAL
-    // =========================================
 
     public function eliminar($id)
     {

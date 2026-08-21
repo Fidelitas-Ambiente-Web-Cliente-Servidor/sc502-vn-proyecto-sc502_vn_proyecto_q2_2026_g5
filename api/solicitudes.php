@@ -24,6 +24,7 @@ try {
     // =========================================
     // GET /api/solicitudes.php?tipo=enviadas
     // GET /api/solicitudes.php?tipo=recibidas
+    // GET
     // =========================================
 
     if ($metodo === 'GET') {
@@ -83,15 +84,54 @@ try {
 
         echo json_encode($resultado);
 
+        // -------------------------------------
+        // OBTENER POR ID
+        // -------------------------------------
+
+        if (isset($_GET['id'])) {
+
+            $solicitud =
+                $controller->obtener(
+                    $_GET['id']
+                );
+
+
+            if (!$solicitud) {
+
+                http_response_code(404);
+
+                echo json_encode([
+                    'ok' => false,
+                    'mensaje' =>
+                        'Solicitud no encontrada'
+                ]);
+
+                exit;
+            }
+
+
+            echo json_encode([
+                'ok' => true,
+                'datos' => $solicitud
+            ]);
+
+            exit;
+        }
+
+
+
+        $solicitudes =
+            $controller->listar();
+
+
+        echo json_encode([
+            'ok' => true,
+            'datos' => $solicitudes
+        ]);
+
         exit;
     }
 
-
-    // =========================================
-    // PUT
-    // Aceptar / rechazar una solicitud
-    // Body: { id, estado: "Aprobada" | "Rechazada" }
-    // =========================================
 
     if ($metodo === 'PUT') {
 
