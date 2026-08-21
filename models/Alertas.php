@@ -12,9 +12,6 @@ class Alerta
     }
 
 
-    // =========================================
-    // OBTENER TODAS LAS ALERTAS
-    // =========================================
 
     public function obtenerTodos()
     {
@@ -39,10 +36,6 @@ class Alerta
         return $consulta->fetchAll(PDO::FETCH_ASSOC);
     }
 
-
-    // =========================================
-    // OBTENER ALERTA
-    // =========================================
 
     public function obtenerPorId($id)
     {
@@ -69,10 +62,6 @@ class Alerta
         return $consulta->fetch(PDO::FETCH_ASSOC);
     }
 
-
-    // =========================================
-    // CREAR ALERTA
-    // =========================================
 
     public function crear($datos)
     {
@@ -118,10 +107,6 @@ class Alerta
     }
 
 
-    // =========================================
-    // ACTUALIZAR ALERTA
-    // =========================================
-
     public function actualizar($id, $datos)
     {
         $campos = [
@@ -163,9 +148,6 @@ class Alerta
     }
 
 
-    // =========================================
-    // ELIMINAR ALERTA
-    // =========================================
 
     public function eliminar($id)
     {
