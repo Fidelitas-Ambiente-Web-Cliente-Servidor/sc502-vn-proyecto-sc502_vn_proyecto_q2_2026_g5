@@ -1,70 +1,114 @@
-let solicitudes = JSON.parse(localStorage.getItem("solicitudes")) || [];
-
-let animales = JSON.parse(localStorage.getItem("animales")) || [];
+const API = "api/solicitudes.php";
 
 const contenedor = document.getElementById("contenedorSolicitudes");
 
-/* Datos de prueba */
+let solicitudes = [];
 
-if(solicitudes.length===0){
 
-    solicitudes=[
+// =========================================
+// CLASE CSS SEGÚN ESTADO
+// =========================================
 
-        {
-            id:1,
-            persona:"María González",
-            animal:"Max",
-            telefono:"8888-1111",
-            fecha:"10/07/2026",
-            estado:"Pendiente"
-        },
+const CLASE_ESTADO = {
+    "Pendiente": "pendiente",
+    "En revisión": "en-revision",
+    "Aprobada": "aprobada",
+    "Rechazada": "rechazada",
+    "Completada": "completada",
+    "Cancelada": "cancelada"
+};
 
-        {
-            id:2,
-            persona:"Carlos Mora",
-            animal:"Luna",
-            telefono:"8888-2222",
-            fecha:"09/07/2026",
-            estado:"Pendiente"
+
+// =========================================
+// INICIAR
+// =========================================
+
+cargarSolicitudes();
+
+
+// =========================================
+// CARGAR SOLICITUDES RECIBIDAS
+// (las que otros usuarios enviaron por
+// animales que YO registré)
+// =========================================
+
+async function cargarSolicitudes() {
+
+    contenedor.innerHTML = "<p>Cargando solicitudes...</p>";
+
+    try {
+
+        const respuesta = await fetch(`${API}?tipo=recibidas`);
+
+        const resultado = await respuesta.json();
+
+        if (!resultado.ok) {
+
+            contenedor.innerHTML = "<p>No se pudieron cargar las solicitudes.</p>";
+            return;
+
         }
 
-    ];
+        solicitudes = resultado.datos;
 
-    guardarSolicitudes();
+        mostrar();
+
+    } catch (error) {
+
+        contenedor.innerHTML = "<p>No se pudo conectar con el servidor.</p>";
+
+    }
 
 }
 
-mostrar();
 
-function mostrar(){
+// =========================================
+// PINTAR TARJETAS
+// =========================================
 
-    contenedor.innerHTML="";
+function mostrar() {
 
-    solicitudes.forEach(s=>{
+    contenedor.innerHTML = "";
 
-        contenedor.innerHTML+=`
+    if (solicitudes.length === 0) {
+
+        contenedor.innerHTML = "<p>Todavía no te han enviado solicitudes de adopción.</p>";
+        return;
+
+    }
+
+    solicitudes.forEach(s => {
+
+        const claseEstado = CLASE_ESTADO[s.estado] || "pendiente";
+
+        const puedeGestionar = s.estado === "Pendiente" || s.estado === "En revisión";
+
+        contenedor.innerHTML += `
 
         <div class="solicitud">
 
-            <h3>${s.persona}</h3>
+            <h3>${s.solicitante_nombre} ${s.solicitante_apellido}</h3>
 
-            <p><strong>Animal:</strong> ${s.animal}</p>
+            <p><strong>Animal:</strong> ${s.nombre_mascota}</p>
 
-            <p><strong>Teléfono:</strong> ${s.telefono}</p>
+            <p><strong>Correo:</strong> ${s.solicitante_correo}</p>
 
-            <p><strong>Fecha:</strong> ${s.fecha}</p>
+            <p><strong>Teléfono:</strong> ${s.solicitante_telefono ?? "No indicado"}</p>
 
-            <span class="estado ${s.estado.toLowerCase()}">
+            <p><strong>Fecha:</strong> ${formatearFecha(s.fecha_solicitud)}</p>
 
+            ${s.observaciones ? `<p><strong>Mensaje:</strong> ${s.observaciones}</p>` : ""}
+
+            <span class="estado ${claseEstado}">
                 ${s.estado}
-
             </span>
 
+            ${puedeGestionar ? `
             <div class="botones">
 
                 <button
                     class="btnAceptar"
-                    onclick="aceptar(${s.id})">
+                    onclick="aceptar(${s.id_solicitud})">
 
                     Aceptar
 
@@ -72,13 +116,14 @@ function mostrar(){
 
                 <button
                     class="btnRechazar"
-                    onclick="rechazar(${s.id})">
+                    onclick="rechazar(${s.id_solicitud})">
 
                     Rechazar
 
                 </button>
 
             </div>
+            ` : ""}
 
         </div>
 
@@ -88,42 +133,57 @@ function mostrar(){
 
 }
 
-function aceptar(id){
 
-    const solicitud=solicitudes.find(s=>s.id===id);
+// =========================================
+// ACEPTAR / RECHAZAR (PUT real)
+// =========================================
 
-    solicitud.estado="Aceptada";
+async function aceptar(id) {
+    await actualizarEstado(id, "Aprobada");
+}
 
-    const animal=animales.find(a=>a.nombre===solicitud.animal);
+async function rechazar(id) {
+    await actualizarEstado(id, "Rechazada");
+}
 
-    if(animal){
+async function actualizarEstado(id, estado) {
 
-        animal.estado="Adoptado";
+    try {
 
-        localStorage.setItem("animales",JSON.stringify(animales));
+        const respuesta = await fetch(API, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id, estado })
+        });
+
+        const resultado = await respuesta.json();
+
+        if (!resultado.ok) {
+            alert(resultado.mensaje);
+            return;
+        }
+
+        cargarSolicitudes();
+
+    } catch (error) {
+
+        alert("No se pudo conectar con el servidor");
 
     }
 
-    guardarSolicitudes();
-
-    mostrar();
-
 }
 
-function rechazar(id){
 
-    const solicitud=solicitudes.find(s=>s.id===id);
+// =========================================
+// FORMATEAR FECHA (YYYY-MM-DD HH:MM:SS -> DD/MM/YYYY)
+// =========================================
 
-    solicitud.estado="Rechazada";
+function formatearFecha(fechaSql) {
 
-    guardarSolicitudes();
+    const fecha = new Date(fechaSql.replace(" ", "T"));
 
-    mostrar();
+    if (isNaN(fecha)) return fechaSql;
 
-}
-
-function guardarSolicitudes(){
-
-    localStorage.setItem("solicitudes",JSON.stringify(solicitudes));
+    return fecha.toLocaleDateString("es-CR");
 
 }

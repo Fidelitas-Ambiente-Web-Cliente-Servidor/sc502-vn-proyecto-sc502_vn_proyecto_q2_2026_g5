@@ -46,7 +46,14 @@
 
 }
 
-.aceptada{
+.en-revision{
+
+    background:#3B82F6;
+
+}
+
+.aceptada,
+.aprobada{
 
     background:#10B981;
 
@@ -55,6 +62,18 @@
 .rechazada{
 
     background:#EF4444;
+
+}
+
+.completada{
+
+    background:#0F766E;
+
+}
+
+.cancelada{
+
+    background:#94A3B8;
 
 }
 

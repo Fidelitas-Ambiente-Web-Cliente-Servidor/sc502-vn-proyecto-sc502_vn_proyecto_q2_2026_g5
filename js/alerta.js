@@ -1,3 +1,5 @@
+const API = "api/reportes.php";
+
 document.addEventListener("DOMContentLoaded", function () {
 
     let tipoInput = document.getElementById("tipo");
@@ -17,6 +19,33 @@ document.addEventListener("DOMContentLoaded", function () {
     let mensajeExito = document.getElementById("mensajeExito");
 
     let contenedorAlertas = document.getElementById("contenedorAlertas");
+
+
+    // =========================================
+    // TIPOS: texto del <option> -> ENUM de la BD
+    // =========================================
+
+    const TIPOS = {
+        "Animal Perdido": "Perdida",
+        "Animal Encontrado": "Encontrada"
+    };
+
+    const TIPOS_INVERSO = {
+        "Perdida": "Animal Perdido",
+        "Encontrada": "Animal Encontrado"
+    };
+
+
+    // =========================================
+    // CARGAR MIS ALERTAS AL ENTRAR
+    // =========================================
+
+    cargarAlertas();
+
+
+    // =========================================
+    // VALIDACIÓN DEL FORMULARIO
+    // =========================================
 
     function validarFormulario() {
 
@@ -85,62 +114,157 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-tipoInput.addEventListener("input", validarFormulario);
+    tipoInput.addEventListener("input", validarFormulario);
     animalInput.addEventListener("input", validarFormulario);
     ubicacionInput.addEventListener("input", validarFormulario);
     fechaInput.addEventListener("input", validarFormulario);
     descripcionInput.addEventListener("input", validarFormulario);
 
-    btnEnviar.addEventListener("click", function () {
 
-        let tarjeta = document.createElement("div");
-        tarjeta.className = "alerta";
+    // =========================================
+    // ENVIAR REPORTE (POST a la API real)
+    // =========================================
 
-        let titulo = document.createElement("h3");
-        titulo.textContent = tipoInput.value;
+    btnEnviar.addEventListener("click", async function () {
 
-        let mascota = document.createElement("p");
-        mascota.textContent = "Animal: " + animalInput.value;
-
-        let lugar = document.createElement("p");
-        lugar.textContent = "Ubicación: " + ubicacionInput.value;
-
-        let fecha = document.createElement("p");
-        fecha.textContent = "Fecha: " + fechaInput.value;
-
-        let descripcion = document.createElement("p");
-        descripcion.textContent = "Descripción: " + descripcionInput.value;
-
-        tarjeta.appendChild(titulo);
-        tarjeta.appendChild(mascota);
-        tarjeta.appendChild(lugar);
-        tarjeta.appendChild(fecha);
-        tarjeta.appendChild(descripcion);
-
-        contenedorAlertas.appendChild(tarjeta);
-
-        mensajeExito.innerText = "¡Reporte publicado correctamente!";
-        mensajeExito.style.color = "green";
-
-        tipoInput.value = "";
-        animalInput.value = "";
-        ubicacionInput.value = "";
-        fechaInput.value = "";
-        descripcionInput.value = "";
-
-        errorTipo.innerText = "";
-        errorAnimal.innerText = "";
-        errorUbicacion.innerText = "";
-        errorFecha.innerText = "";
-        errorDescripcion.innerText = "";
+        const datos = {
+            tipo: TIPOS[tipoInput.value] || tipoInput.value,
+            animal: animalInput.value.trim(),
+            lugar_referencia: ubicacionInput.value.trim(),
+            fecha_evento: fechaInput.value,
+            descripcion: descripcionInput.value.trim()
+        };
 
         btnEnviar.disabled = true;
 
-        setTimeout(function () {
-            mensajeExito.innerText = "";
-        }, 2500);
+        try {
+
+            const respuesta = await fetch(API, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(datos)
+            });
+
+            const resultado = await respuesta.json();
+
+            if (!resultado.ok) {
+
+                mensajeExito.innerText = resultado.mensaje;
+                mensajeExito.style.color = "red";
+                btnEnviar.disabled = false;
+                return;
+
+            }
+
+            mensajeExito.innerText = "¡Reporte publicado correctamente!";
+            mensajeExito.style.color = "green";
+
+            tipoInput.value = "";
+            animalInput.value = "";
+            ubicacionInput.value = "";
+            fechaInput.value = "";
+            descripcionInput.value = "";
+
+            errorTipo.innerText = "";
+            errorAnimal.innerText = "";
+            errorUbicacion.innerText = "";
+            errorFecha.innerText = "";
+            errorDescripcion.innerText = "";
+
+            setTimeout(function () {
+                mensajeExito.innerText = "";
+            }, 2500);
+
+            cargarAlertas();
+
+        } catch (error) {
+
+            mensajeExito.innerText = "No se pudo conectar con el servidor";
+            mensajeExito.style.color = "red";
+            btnEnviar.disabled = false;
+
+        }
 
     });
 
+
+    // =========================================
+    // CARGAR Y PINTAR MIS ALERTAS (GET real)
+    // =========================================
+
+    async function cargarAlertas() {
+
+        contenedorAlertas.innerHTML = "<p>Cargando...</p>";
+
+        try {
+
+            const respuesta = await fetch(API);
+
+            const resultado = await respuesta.json();
+
+            if (!resultado.ok) {
+
+                contenedorAlertas.innerHTML = "<p>No se pudieron cargar tus alertas.</p>";
+                return;
+
+            }
+
+            pintarAlertas(resultado.datos);
+
+        } catch (error) {
+
+            contenedorAlertas.innerHTML = "<p>No se pudo conectar con el servidor.</p>";
+
+        }
+
+    }
+
+    function pintarAlertas(reportes) {
+
+        contenedorAlertas.innerHTML = "";
+
+        if (reportes.length === 0) {
+
+            contenedorAlertas.innerHTML = "<p>Todavía no has publicado ninguna alerta.</p>";
+            return;
+
+        }
+
+        reportes.forEach(r => {
+
+            let tarjeta = document.createElement("div");
+            tarjeta.className = "alerta";
+
+            let titulo = document.createElement("h3");
+            titulo.textContent = TIPOS_INVERSO[r.tipo] || r.tipo;
+
+            let mascota = document.createElement("p");
+            mascota.textContent = "Animal: " + r.animal;
+
+            let lugar = document.createElement("p");
+            lugar.textContent = "Ubicación: " + (r.lugar_referencia || "");
+
+            let fecha = document.createElement("p");
+            fecha.textContent = "Fecha: " + r.fecha_evento;
+
+            let descripcion = document.createElement("p");
+            descripcion.textContent = "Descripción: " + r.descripcion;
+
+            let estado = document.createElement("span");
+            estado.className = "estadoReporte";
+            estado.textContent = r.estado;
+
+            tarjeta.appendChild(titulo);
+            tarjeta.appendChild(mascota);
+            tarjeta.appendChild(lugar);
+            tarjeta.appendChild(fecha);
+            tarjeta.appendChild(descripcion);
+            tarjeta.appendChild(estado);
+
+            contenedorAlertas.appendChild(tarjeta);
+
+        });
+
+    }
 
 });

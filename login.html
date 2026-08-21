@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Huellas a Casa · Iniciar sesión</title>
+
+    <link rel="stylesheet" href="css/estilos.css">
+    <link rel="stylesheet" href="css/login.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+
+<body class="auth-body">
+
+    <main class="auth-contenedor">
+
+        <section class="auth-marca">
+            <i class="fa-solid fa-paw"></i>
+            <h1>Huellas a Casa</h1>
+            <p>Adopción responsable y bienestar animal en Costa Rica.</p>
+        </section>
+
+        <section class="auth-card">
+
+            <div class="auth-tabs">
+                <button class="auth-tab activo" data-tab="login">Iniciar sesión</button>
+                <button class="auth-tab" data-tab="registro">Crear cuenta</button>
+            </div>
+
+            <p class="auth-mensaje" id="mensaje"></p>
+
+            <!-- ===================================== -->
+            <!-- FORMULARIO LOGIN -->
+            <!-- ===================================== -->
+
+            <form id="form-login" class="auth-form">
+
+                <label for="login-correo">Correo electrónico</label>
+                <input type="email" id="login-correo" name="correo" required placeholder="correo@ejemplo.com">
+
+                <label for="login-contraseña">Contraseña</label>
+                <input type="password" id="login-contraseña" name="contraseña" required placeholder="••••••••">
+
+                <button type="submit" class="btn-principal">
+                    <i class="fa-solid fa-right-to-bracket"></i> Iniciar sesión
+                </button>
+
+            </form>
+
+            <!-- ===================================== -->
+            <!-- FORMULARIO REGISTRO -->
+            <!-- ===================================== -->
+
+            <form id="form-registro" class="auth-form oculto">
+
+                <div class="auth-fila">
+                    <div>
+                        <label for="reg-nombre">Nombre</label>
+                        <input type="text" id="reg-nombre" name="nombre" required>
+                    </div>
+                    <div>
+                        <label for="reg-apellido">Apellido</label>
+                        <input type="text" id="reg-apellido" name="apellido" required>
+                    </div>
+                </div>
+
+                <label for="reg-correo">Correo electrónico</label>
+                <input type="email" id="reg-correo" name="correo" required placeholder="correo@ejemplo.com">
+
+                <label for="reg-telefono">Teléfono</label>
+                <input type="tel" id="reg-telefono" name="telefono" placeholder="8888-8888">
+
+                <label for="reg-canton">Cantón</label>
+                <input type="text" id="reg-canton" name="canton" placeholder="San José">
+
+                <label for="reg-contraseña">Contraseña</label>
+                <input type="password" id="reg-contraseña" name="contraseña" required minlength="6" placeholder="Mínimo 6 caracteres">
+
+                <button type="submit" class="btn-principal">
+                    <i class="fa-solid fa-user-plus"></i> Crear cuenta
+                </button>
+
+            </form>
+
+        </section>
+
+    </main>
+
+    <script src="js/login.js"></script>
+
+</body>
+
+</html>

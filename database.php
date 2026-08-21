@@ -9,7 +9,7 @@ class Database{
         if(self::$conexion == null){
 
             $server = "db";
-            $database = "huellas_a_casa";
+            $database = "Huellas_a_casa";
             $userDB = "root";
             $passDB = "root";
 
