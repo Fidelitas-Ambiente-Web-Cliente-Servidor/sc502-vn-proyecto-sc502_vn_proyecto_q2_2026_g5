@@ -49,7 +49,6 @@ body {
     background: #14B8A6;
 }
 
-
 header, main, footer {
     margin-left: 240px;
 }
@@ -99,7 +98,7 @@ fieldset legend {
     padding: 0 5px;
 }
 
-#formulario div {
+#formulario > div {
     display: flex;
     flex-direction: column;
     gap: 6px;
@@ -141,7 +140,7 @@ fieldset legend {
 #formulario span {
     font-size: 0.8rem;
     font-weight: 500;
-    color: #EF4444; /* Rojo para los errores */
+    color: #EF4444;
     margin-top: 2px;
 }
 
@@ -172,6 +171,33 @@ fieldset legend {
     font-size: 0.95rem;
     font-weight: 500;
     margin-top: 10px;
+}
+
+#mapaSeleccion {
+    width: 100%;
+    height: 320px;              
+    border-radius: 12px;
+    border: 1px solid #CBD5E1;
+    margin-top: 8px;
+    z-index: 0;                 
+}
+
+.mapaAlertas {
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+.mapaAlertas h2 {
+    margin-bottom: 20px;
+    color: #0F172A;
+    font-size: 24px;
+}
+
+#mapaAlertas {
+    width: 100%;
+    height: 380px;
+    border-radius: 18px;
+    box-shadow: 0 8px 20px rgba(0,0,0,.06);
 }
 
 .misAlertas {

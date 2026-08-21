@@ -17,6 +17,46 @@ document.addEventListener("DOMContentLoaded", function () {
     let mensajeExito = document.getElementById("mensajeExito");
 
     let contenedorAlertas = document.getElementById("contenedorAlertas");
+    
+    function cargarAlertas() {
+        fetch("api/alerta.php")
+            .then(function (respuesta) {
+                return respuesta.json();
+            })
+            .then(function (resultado) {
+                if (resultado.ok && resultado.datos) {
+                    contenedorAlertas.innerHTML = ""; 
+                    resultado.datos.forEach(function (alerta) {
+                        let tarjeta = document.createElement("div");
+                        tarjeta.className = "alerta";
+
+                        let titulo = document.createElement("h3");
+                        titulo.textContent = alerta.tipo;
+
+                        let mascota = document.createElement("p");
+                        mascota.textContent = "Animal: " + alerta.descripcion;
+
+                        let lugar = document.createElement("p");
+                        lugar.textContent = "Ubicación: " + alerta.lugar_referencia;
+
+                        let fecha = document.createElement("p");
+                        fecha.textContent = "Fecha: " + alerta.fecha_reporte;
+
+                        tarjeta.appendChild(titulo);
+                        tarjeta.appendChild(mascota);
+                        tarjeta.appendChild(lugar);
+                        tarjeta.appendChild(fecha);
+
+                        contenedorAlertas.appendChild(tarjeta);
+                    });
+                }
+            })
+            .catch(function (error) {
+                console.log("Error al cargar alertas:", error);
+            });
+    }
+
+    cargarAlertas();
 
     function validarFormulario() {
 
@@ -91,7 +131,7 @@ tipoInput.addEventListener("input", validarFormulario);
     fechaInput.addEventListener("input", validarFormulario);
     descripcionInput.addEventListener("input", validarFormulario);
 
-    btnEnviar.addEventListener("click", function () {
+btnEnviar.addEventListener("click", function () {
 
         let tarjeta = document.createElement("div");
         tarjeta.className = "alerta";
@@ -142,5 +182,4 @@ tipoInput.addEventListener("input", validarFormulario);
 
     });
 
-
-});
+     });
