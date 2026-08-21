@@ -2,10 +2,11 @@
 <html lang="es">
 
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Perfil de la Organización | Huellas a Casa</title>
+    <title>Organizaciones | Huellas a Casa</title>
 
     <link rel="stylesheet" href="css/estilos.css">
     <link rel="stylesheet" href="css/perfil.css">
@@ -21,6 +22,7 @@
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
     >
+
 </head>
 
 <body>
@@ -33,6 +35,7 @@
         </h2>
 
         <ul>
+
             <li>
                 <a href="index.html">
                     <i class="fa-solid fa-house"></i>
@@ -55,7 +58,7 @@
             </li>
 
             <li>
-                <a href="dashboard.html">
+                <a class="activo" href="dashboard.html">
                     <i class="fa-solid fa-chart-column"></i>
                     Dashboard
                 </a>
@@ -67,6 +70,7 @@
                     Educación
                 </a>
             </li>
+
         </ul>
 
     </aside>
@@ -77,26 +81,78 @@
         <header class="page-header">
 
             <div>
-                <h1>Perfil de la Organización</h1>
+
+                <h1>
+                    Organizaciones
+                </h1>
 
                 <p>
-                    Consulta y actualiza la información de la organización.
+                    Consulta, registra y administra las organizaciones
+                    y sus usuarios asociados.
                 </p>
+
             </div>
 
         </header>
 
 
+        <!-- =========================================
+             SELECCIÓN DE ORGANIZACIÓN
+        ========================================== -->
+
+        <section class="panel-organizaciones">
+
+            <div class="campo">
+
+                <label for="selectorOrganizacion">
+                    Organización
+                </label>
+
+                <select id="selectorOrganizacion">
+
+                    <option value="">
+                        Cargando organizaciones...
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <button
+                type="button"
+                id="btnNuevaOrganizacion"
+                class="btnNuevaOrganizacion"
+            >
+
+                <i class="fa-solid fa-plus"></i>
+
+                Nueva organización
+
+            </button>
+
+        </section>
+
+
+        <!-- =========================================
+             PERFIL DE ORGANIZACIÓN
+        ========================================== -->
+
         <section class="perfil-grid">
+
 
             <!-- FORMULARIO -->
 
             <div class="perfil-formulario">
 
-                <h2>
+                <h2 id="tituloFormulario">
+
                     <i class="fa-solid fa-building"></i>
+
                     Información General
+
                 </h2>
+
 
                 <form id="formPerfil">
 
@@ -211,7 +267,10 @@
                     </div>
 
 
-                    <button type="submit">
+                    <button
+                        type="submit"
+                        id="btnGuardar"
+                    >
 
                         <i class="fa-solid fa-floppy-disk"></i>
 
@@ -224,7 +283,7 @@
             </div>
 
 
-            <!-- VISTA PREVIA -->
+            <!-- PREVIEW -->
 
             <div class="perfil-preview">
 
@@ -253,38 +312,46 @@
                     <div class="preview-datos">
 
                         <p>
+
                             <i class="fa-solid fa-envelope"></i>
 
                             <span id="pCorreo">
                                 No indicado
                             </span>
+
                         </p>
 
 
                         <p>
+
                             <i class="fa-solid fa-phone"></i>
 
                             <span id="pTelefono">
                                 No indicado
                             </span>
+
                         </p>
 
 
                         <p>
+
                             <i class="fa-solid fa-location-dot"></i>
 
                             <span id="pDireccion">
                                 No indicada
                             </span>
+
                         </p>
 
 
                         <p>
+
                             <i class="fa-solid fa-map"></i>
 
                             <span id="pCanton">
                                 No indicado
                             </span>
+
                         </p>
 
                     </div>
@@ -297,9 +364,85 @@
                     </div>
 
 
-                    <small id="pFecha"></small>
+                    <small id="pFecha">
+                    </small>
 
                 </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================================
+             USUARIOS DE LA ORGANIZACIÓN
+        ========================================== -->
+
+        <section class="panel-usuarios">
+
+            <div class="panel-usuarios-header">
+
+                <div>
+
+                    <h2>
+
+                        <i class="fa-solid fa-users"></i>
+
+                        Usuarios de la organización
+
+                    </h2>
+
+                    <p>
+                        Asocia usuarios existentes a la organización seleccionada.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="asignar-usuario">
+
+                <div class="campo">
+
+                    <label for="selectorUsuario">
+                        Usuario disponible
+                    </label>
+
+                    <select id="selectorUsuario">
+
+                        <option value="">
+                            Seleccione un usuario
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    id="btnAsignarUsuario"
+                    class="btnAsignarUsuario"
+                >
+
+                    <i class="fa-solid fa-user-plus"></i>
+
+                    Asociar usuario
+
+                </button>
+
+            </div>
+
+
+            <div
+                id="listaUsuariosOrganizacion"
+                class="lista-usuarios"
+            >
+
+                <p class="sin-usuarios">
+                    Seleccione una organización.
+                </p>
 
             </div>
 
