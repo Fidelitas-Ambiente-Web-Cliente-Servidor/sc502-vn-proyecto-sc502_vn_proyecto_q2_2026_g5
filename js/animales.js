@@ -15,18 +15,10 @@ const vistaFoto = document.getElementById("vistaFoto");
 const raza = document.getElementById("raza");
 
 
-// =========================================
-// INICIAR
-// =========================================
-
 cargarAnimales();
 
 cargarRazas();
 
-
-// =========================================
-// EVENTOS
-// =========================================
 
 formulario.addEventListener(
     "submit",
@@ -43,10 +35,6 @@ btnFoto.addEventListener(
     obtenerFoto
 );
 
-
-// =========================================
-// CARGAR ANIMALES
-// =========================================
 
 async function cargarAnimales() {
 
@@ -87,10 +75,6 @@ async function cargarAnimales() {
     }
 }
 
-
-// =========================================
-// CARGAR RAZAS DOG CEO
-// =========================================
 
 async function cargarRazas() {
 
@@ -169,10 +153,6 @@ async function cargarRazas() {
                 }
 
 
-                // =================================
-                // RAZAS CON SUBRAZAS
-                // =================================
-
                 subrazas.forEach(
                     subraza => {
 
@@ -221,10 +201,6 @@ async function cargarRazas() {
     }
 }
 
-
-// =========================================
-// OBTENER FOTO SEGÚN RAZA
-// =========================================
 
 async function obtenerFoto() {
 
@@ -310,18 +286,8 @@ async function obtenerFoto() {
 
         }
 
-
-        // =================================
-        // GUARDAR URL
-        // =================================
-
         foto.value =
             resultado.message;
-
-
-        // =================================
-        // MOSTRAR FOTO
-        // =================================
 
         vistaFoto.innerHTML = `
 
@@ -370,9 +336,6 @@ function capitalizar(texto) {
 }
 
 
-// =========================================
-// GUARDAR ANIMAL
-// =========================================
 
 async function guardarAnimal(e) {
 
@@ -555,10 +518,6 @@ async function guardarAnimal(e) {
 }
 
 
-// =========================================
-// MOSTRAR ANIMALES
-// =========================================
-
 function mostrarAnimales(
     lista = animales
 ) {
@@ -697,9 +656,6 @@ function mostrarAnimales(
 }
 
 
-// =========================================
-// EDITAR
-// =========================================
 
 function editar(id) {
 
@@ -788,10 +744,6 @@ function editar(id) {
         "Disponible";
 
 
-    // =================================
-    // FOTO ACTUAL
-    // =================================
-
     foto.value =
         animal.foto || "";
 
@@ -840,10 +792,6 @@ function editar(id) {
 
 }
 
-
-// =========================================
-// ELIMINAR
-// =========================================
 
 async function eliminarAnimal(id) {
 
@@ -917,10 +865,6 @@ async function eliminarAnimal(id) {
     }
 }
 
-
-// =========================================
-// BUSCAR
-// =========================================
 
 function filtrar() {
 

@@ -11,20 +11,10 @@ class AnimalesController
         $this->animalModel = new Animal();
     }
 
-
-    // =========================================
-    // LISTAR ANIMALES
-    // =========================================
-
     public function listar()
     {
         return $this->animalModel->obtenerTodos();
     }
-
-
-    // =========================================
-    // OBTENER ANIMAL
-    // =========================================
 
     public function obtener($id)
     {
@@ -32,29 +22,17 @@ class AnimalesController
     }
 
 
-    // =========================================
-    // CREAR ANIMAL
-    // =========================================
-
     public function crear($datos)
     {
         return $this->animalModel->crear($datos);
     }
 
 
-    // =========================================
-    // ACTUALIZAR ANIMAL
-    // =========================================
-
     public function actualizar($id, $datos)
     {
         return $this->animalModel->actualizar($id, $datos);
     }
 
-
-    // =========================================
-    // ELIMINAR ANIMAL
-    // =========================================
 
     public function eliminar($id)
     {

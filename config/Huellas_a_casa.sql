@@ -213,3 +213,26 @@ VALUES (
     'San Jose',
     1
 );
+
+
+INSERT INTO organizaciones (
+    nombre,
+    tipo,
+    telefono,
+    correo,
+    direccion,
+    canton,
+    verificada
+)
+VALUES (
+    'Huellas a Casa',
+    'Refugio',
+    '8888-8888',
+    'info@huellasacasa.com',
+    'San José, Costa Rica',
+    'San José',
+    1
+);
+
+
+INSERT INTO solicitudes_adopcion ( id_mascota, id_usuario, estado, observaciones ) VALUES ( 9, 1, 'Pendiente', 'Solicitud de prueba para adopción' );
