@@ -220,6 +220,14 @@ footer {
     margin-top: auto;
 }
 
+.sidebar a:hover {
+    background: #14B8A6;
+}
+
+.sidebar a.activo {
+    background: #14B8A6;
+}
+
 @media(max-width: 900px) {
     body {
         flex-direction: column;
