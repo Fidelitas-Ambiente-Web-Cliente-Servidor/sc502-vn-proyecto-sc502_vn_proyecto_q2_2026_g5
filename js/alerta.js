@@ -1,82 +1,52 @@
-const API = "api/reportes.php";
-
 document.addEventListener("DOMContentLoaded", function () {
 
 
-    let tipoInput =
-        document.getElementById("tipo");
 
-    let animalInput =
-        document.getElementById("animal");
+    const API = "api/alerta.php";
 
-    let ubicacionInput =
-        document.getElementById("ubicacion");
+    const tipoInput = document.getElementById("tipo");
+    const animalInput = document.getElementById("animal");
+    const ubicacionInput = document.getElementById("ubicacion");
+    const fechaInput = document.getElementById("fecha");
+    const descripcionInput = document.getElementById("descripcion");
 
-    let fechaInput =
-        document.getElementById("fecha");
+    const latitudInput = document.getElementById("latitud");
+    const longitudInput = document.getElementById("longitud");
 
+    const btnEnviar = document.getElementById("btnEnviar");
 
-    const TIPOS = {
-        "Animal Perdido": "Perdida",
-        "Animal Encontrado": "Encontrada"
-    };
+    const errorTipo = document.getElementById("errorTipo");
+    const errorAnimal = document.getElementById("errorAnimal");
+    const errorUbicacion = document.getElementById("errorUbicacion");
+    const errorFecha = document.getElementById("errorFecha");
+    const errorDescripcion = document.getElementById("errorDescripcion");
+    const errorMapa = document.getElementById("errorMapa");
 
-    const TIPOS_INVERSO = {
-        "Perdida": "Animal Perdido",
-        "Encontrada": "Animal Encontrado"
-    };
+    const mensajeExito = document.getElementById("mensajeExito");
 
-    cargarAlertas();
+    const contenedorAlertas = document.getElementById("contenedorAlertas");
 
-    function validarFormulario() {
-    let descripcionInput =
-        document.getElementById("descripcion");
-
-
-    let latitudInput =
-        document.getElementById("latitud");
-
-    let longitudInput =
-        document.getElementById("longitud");
-
-
-    let btnEnviar =
-        document.getElementById("btnEnviar");
-
-
-    let errorTipo =
-        document.getElementById("errorTipo");
-
-    let errorAnimal =
-        document.getElementById("errorAnimal");
-
-    let errorUbicacion =
-        document.getElementById("errorUbicacion");
-
-    let errorFecha =
-        document.getElementById("errorFecha");
-
-    let errorDescripcion =
-        document.getElementById("errorDescripcion");
-
-    let errorMapa =
-        document.getElementById("errorMapa");
-
-
-    let mensajeExito =
-        document.getElementById("mensajeExito");
-
-
-    let contenedorAlertas =
-        document.getElementById("contenedorAlertas");
-
-
-    let cantidadAlertas =
-        document.getElementById("cantidadAlertas");
+    const cantidadAlertas = document.getElementById("cantidadAlertas");
 
 
 
-    let mapaSeleccion = L.map(
+    if (typeof L === "undefined") {
+
+        console.error("Leaflet no está cargado.");
+
+        mensajeExito.innerText =
+            "No fue posible cargar los mapas.";
+
+        mensajeExito.style.color =
+            "#DC2626";
+
+        return;
+    }
+
+
+
+
+    const mapaSeleccion = L.map(
         "mapaSeleccion"
     ).setView(
         [9.9281, -84.0907],
@@ -99,52 +69,32 @@ document.addEventListener("DOMContentLoaded", function () {
         "click",
         function (evento) {
 
+            const latitud = evento.latlng.lat;
 
-            let latitud =
-                evento.latlng.lat;
-
-
-            let longitud =
-                evento.latlng.lng;
+            const longitud = evento.latlng.lng;
 
 
+            latitudInput.value = latitud;
 
-            /* Guardar coordenadas */
+            longitudInput.value = longitud;
 
-            latitudInput.value =
-                latitud;
-
-
-            longitudInput.value =
-                longitud;
-
-
-
-            /* Si ya existe marcador lo movemos */
 
             if (marcadorSeleccion) {
-
 
                 marcadorSeleccion.setLatLng(
                     evento.latlng
                 );
 
-
             }
             else {
 
-
-                marcadorSeleccion =
-                    L.marker(
-                        evento.latlng
-                    )
-                        .addTo(
-                            mapaSeleccion
-                        );
-
+                marcadorSeleccion = L.marker(
+                    evento.latlng
+                ).addTo(
+                    mapaSeleccion
+                );
 
             }
-
 
 
             marcadorSeleccion
@@ -154,19 +104,17 @@ document.addEventListener("DOMContentLoaded", function () {
                 .openPopup();
 
 
-
             errorMapa.innerText = "";
 
 
             validarFormulario();
-
 
         }
     );
 
 
 
-    let mapaAlertas = L.map(
+    const mapaAlertas = L.map(
         "mapaAlertas"
     ).setView(
         [9.9281, -84.0907],
@@ -182,581 +130,134 @@ document.addEventListener("DOMContentLoaded", function () {
     ).addTo(mapaAlertas);
 
 
-
-
-    let grupoMarcadores =
-        L.layerGroup()
-            .addTo(
-                mapaAlertas
-            );
-
-
-
-
-    function cargarAlertas() {
-
-
-        fetch(
-            "api/alerta.php"
-        )
-
-
-            .then(
-                function (respuesta) {
-
-
-                    if (!respuesta.ok) {
-
-                        throw new Error(
-                            "Error HTTP: " +
-                            respuesta.status
-                        );
-
-                    }
-
-
-                    return respuesta.json();
-
-
-                }
-            )
-
-
-            .then(
-                function (resultado) {
-
-
-                    if (
-                        resultado.ok &&
-                        Array.isArray(resultado.datos)
-                    ) {
-
-
-                        /* Limpiar tarjetas */
-
-                        contenedorAlertas.innerHTML = "";
-
-
-                        /* Limpiar mapa */
-
-                        grupoMarcadores.clearLayers();
-
-
-
-                        /* Actualizar contador */
-
-                        cantidadAlertas.innerText =
-                            resultado.datos.length +
-                            (
-                                resultado.datos.length === 1
-                                    ? " Reporte"
-                                    : " Reportes"
-                            );
-
-
-
-                        /* Coordenadas para ajustar mapa */
-
-                        let coordenadas = [];
-
-
-
-                        resultado.datos.forEach(
-                            function (alerta) {
-
-
-                                /* Mostrar tarjeta */
-
-                                crearTarjetaAlerta(
-                                    alerta
-                                );
-
-
-                                /* Mostrar marcador */
-
-                                crearMarcadorAlerta(
-                                    alerta,
-                                    coordenadas
-                                );
-
-
-                            }
-                        );
-
-
-
-                        /* Ajustar mapa a los marcadores */
-
-                        if (
-                            coordenadas.length > 0
-                        ) {
-
-
-                            mapaAlertas.fitBounds(
-                                coordenadas,
-                                {
-                                    padding: [
-                                        40,
-                                        40
-                                    ],
-                                    maxZoom: 14
-                                }
-                            );
-
-
-                        }
-
-
-                    }
-
-
-                }
-            )
-
-
-            .catch(
-                function (error) {
-
-
-                    console.log(
-                        "Error al cargar alertas:",
-                        error
-                    );
-
-
-                    contenedorAlertas.innerHTML =
-                        "<p>No fue posible cargar las alertas.</p>";
-
-
-                }
-            );
-
-
-    }
-
-    tipoInput.addEventListener("input", validarFormulario);
-    animalInput.addEventListener("input", validarFormulario);
-    ubicacionInput.addEventListener("input", validarFormulario);
-    fechaInput.addEventListener("input", validarFormulario);
-    descripcionInput.addEventListener("input", validarFormulario);
-
-
-    // =========================================
-    // ENVIAR REPORTE (POST a la API real)
-    // =========================================
-
-    btnEnviar.addEventListener("click", async function () {
-
-        const datos = {
-            tipo: TIPOS[tipoInput.value] || tipoInput.value,
-            animal: animalInput.value.trim(),
-            lugar_referencia: ubicacionInput.value.trim(),
-            fecha_evento: fechaInput.value,
-            descripcion: descripcionInput.value.trim()
-        };
-
-    function crearMarcadorAlerta(
-        alerta,
-        coordenadas
-    ) {
-
-
-        if (
-            alerta.latitud === null ||
-            alerta.longitud === null ||
-            alerta.latitud === "" ||
-            alerta.longitud === ""
-        ) {
-
-            return;
-
-        }
-
-
-
-        let latitud =
-            parseFloat(
-                alerta.latitud
-            );
-
-
-        let longitud =
-            parseFloat(
-                alerta.longitud
-            );
-
-
-
-        if (
-            isNaN(latitud) ||
-            isNaN(longitud)
-        ) {
-
-            return;
-
-        }
-
-
-
-        let posicion = [
-            latitud,
-            longitud
-        ];
-
-
-
-        coordenadas.push(
-            posicion
+    const grupoMarcadores =
+        L.layerGroup().addTo(
+            mapaAlertas
         );
 
-
-
-        /* Crear marcador */
-
-        let marcador =
-            L.marker(
-                posicion
-            );
-
-
-        marcador.addTo(
-            grupoMarcadores
-        );
-
-
-
-        /* Popup */
-
-        let popup = `
-
-            <div class="popup-alerta">
-
-                <strong>
-                    ${escaparHTML(alerta.tipo || "Reporte")}
-                </strong>
-
-                <br><br>
-
-                <b>Ubicación:</b>
-
-                ${escaparHTML(
-            alerta.lugar_referencia ||
-            "No indicada"
-        )}
-
-                <br>
-
-                <b>Descripción:</b>
-
-                ${escaparHTML(
-            alerta.descripcion ||
-            "Sin descripción"
-        )}
-
-                <br>
-
-                <b>Fecha:</b>
-
-                ${escaparHTML(
-            alerta.fecha_reporte ||
-            "No indicada"
-        )}
-
-            </div>
-
-        `;
-
-
-
-        marcador.bindPopup(
-            popup
-        );
-
-
-    }
-
-
-
-
-    function crearTarjetaAlerta(
-        alerta
-    ) {
-
-
-        let tarjeta =
-            document.createElement(
-                "div"
-            );
-
-
-        tarjeta.className =
-            "alerta";
-
-
-
-        /* Título */
-
-        let titulo =
-            document.createElement(
-                "h3"
-            );
-
-
-        titulo.textContent =
-            alerta.tipo ||
-            "Reporte";
-
-
-
-        /* Ubicación */
-
-        let lugar =
-            document.createElement(
-                "p"
-            );
-
-
-        lugar.textContent =
-            "Ubicación: " +
-            (
-                alerta.lugar_referencia ||
-                "No indicada"
-            );
-
-
-
-        /* Fecha */
-
-        let fecha =
-            document.createElement(
-                "p"
-            );
-
-
-        fecha.textContent =
-            "Fecha: " +
-            (
-                alerta.fecha_reporte ||
-                "No indicada"
-            );
-
-
-
-        /* Descripción */
-
-        let descripcion =
-            document.createElement(
-                "p"
-            );
-
-
-        descripcion.textContent =
-            "Descripción: " +
-            (
-                alerta.descripcion ||
-                "Sin descripción"
-            );
-
-
-
-        tarjeta.appendChild(
-            titulo
-        );
-
-
-        tarjeta.appendChild(
-            lugar
-        );
-
-
-        tarjeta.appendChild(
-            fecha
-        );
-
-
-        tarjeta.appendChild(
-            descripcion
-        );
-
-
-
-        contenedorAlertas.appendChild(
-            tarjeta
-        );
-
-
-    }
 
 
 
     function validarFormulario() {
 
-
-        let tipo =
+        const tipo =
             tipoInput.value;
 
-
-        let animal =
+        const animal =
             animalInput.value.trim();
 
-
-        let ubicacion =
+        const ubicacion =
             ubicacionInput.value.trim();
 
-
-        let fecha =
+        const fecha =
             fechaInput.value;
 
-
-        let descripcion =
+        const descripcion =
             descripcionInput.value.trim();
 
-
-        let latitud =
+        const latitud =
             latitudInput.value;
 
-
-        let longitud =
+        const longitud =
             longitudInput.value;
 
 
+        /* Tipo */
 
-        /* TIPO */
-
-        if (
-            tipo === ""
-        ) {
-
+        if (tipo === "") {
 
             errorTipo.innerText =
                 "Seleccione un tipo";
 
-
         }
         else {
 
-
             errorTipo.innerText = "";
-
 
         }
 
 
+        /* Animal */
 
-        /* ANIMAL */
-
-        if (
-            animal.length < 3
-        ) {
-
+        if (animal.length < 3) {
 
             errorAnimal.innerText =
                 "Mínimo 3 caracteres";
 
-
         }
         else {
 
-
             errorAnimal.innerText = "";
-
 
         }
 
 
+        /* Ubicación */
 
-        /* UBICACIÓN */
-
-        if (
-            ubicacion.length < 3
-        ) {
-
+        if (ubicacion.length < 3) {
 
             errorUbicacion.innerText =
                 "Ingrese una ubicación";
 
-
         }
         else {
 
-
             errorUbicacion.innerText = "";
-
 
         }
 
 
+        /* Fecha */
 
-        /* FECHA */
-
-        if (
-            fecha === ""
-        ) {
-
+        if (fecha === "") {
 
             errorFecha.innerText =
                 "Seleccione una fecha";
 
-
         }
         else {
 
-
             errorFecha.innerText = "";
-
 
         }
 
 
+        /* Descripción */
 
-        /* DESCRIPCIÓN */
-
-        if (
-            descripcion.length < 10
-        ) {
-
+        if (descripcion.length < 10) {
 
             errorDescripcion.innerText =
                 "Mínimo 10 caracteres";
 
-
         }
         else {
 
-
             errorDescripcion.innerText = "";
-
 
         }
 
 
-
-        /* MAPA */
+        /* Mapa */
 
         if (
             latitud === "" ||
             longitud === ""
         ) {
 
-
             errorMapa.innerText =
                 "Seleccione un punto en el mapa";
-
 
         }
         else {
 
-
             errorMapa.innerText = "";
-
 
         }
 
 
+        /* Botón */
 
-        /* HABILITAR BOTÓN */
-
-        if (
+        btnEnviar.disabled = !(
             tipo !== "" &&
             animal.length >= 3 &&
             ubicacion.length >= 3 &&
@@ -764,26 +265,9 @@ document.addEventListener("DOMContentLoaded", function () {
             descripcion.length >= 10 &&
             latitud !== "" &&
             longitud !== ""
-        ) {
-
-
-            btnEnviar.disabled =
-                false;
-
-
-        }
-        else {
-
-
-            btnEnviar.disabled =
-                true;
-
-
-        }
-
+        );
 
     }
-
 
 
     tipoInput.addEventListener(
@@ -791,24 +275,20 @@ document.addEventListener("DOMContentLoaded", function () {
         validarFormulario
     );
 
-
     animalInput.addEventListener(
         "input",
         validarFormulario
     );
-
 
     ubicacionInput.addEventListener(
         "input",
         validarFormulario
     );
 
-
     fechaInput.addEventListener(
         "change",
         validarFormulario
     );
-
 
     descripcionInput.addEventListener(
         "input",
@@ -816,11 +296,363 @@ document.addEventListener("DOMContentLoaded", function () {
     );
 
 
+    async function cargarAlertas() {
+
+        try {
+
+            const respuesta =
+                await fetch(API);
+
+
+            const resultado =
+                await respuesta.json();
+
+
+            if (!respuesta.ok || !resultado.ok) {
+
+                throw new Error(
+                    resultado.detalle ||
+                    resultado.mensaje ||
+                    "No fue posible cargar las alertas"
+                );
+
+            }
+
+
+            const alertas =
+                Array.isArray(resultado.datos)
+                    ? resultado.datos
+                    : [];
+
+
+            pintarAlertas(
+                alertas
+            );
+
+
+            pintarMarcadores(
+                alertas
+            );
+
+
+            actualizarContador(
+                alertas.length
+            );
+
+        }
+        catch (error) {
+
+            console.error(
+                "Error al cargar alertas:",
+                error
+            );
+
+
+            contenedorAlertas.innerHTML =
+                "<p>No fue posible cargar las alertas.</p>";
+
+
+            actualizarContador(
+                0
+            );
+
+        }
+
+    }
+
+
+    function pintarAlertas(alertas) {
+
+        contenedorAlertas.innerHTML = "";
+
+
+        if (alertas.length === 0) {
+
+            contenedorAlertas.innerHTML =
+                "<p>Todavía no hay alertas registradas.</p>";
+
+            return;
+
+        }
+
+
+        alertas.forEach(
+            function (alerta) {
+
+                const tarjeta =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                tarjeta.className =
+                    "alerta";
+
+
+                /* Título */
+
+                const titulo =
+                    document.createElement(
+                        "h3"
+                    );
+
+
+                titulo.textContent =
+                    obtenerNombreTipo(
+                        alerta.tipo
+                    );
+
+
+                /* Lugar */
+
+                const lugar =
+                    document.createElement(
+                        "p"
+                    );
+
+
+                lugar.textContent =
+                    "Ubicación: " +
+                    (
+                        alerta.lugar_referencia ||
+                        "No indicada"
+                    );
+
+
+                /* Fecha */
+
+                const fecha =
+                    document.createElement(
+                        "p"
+                    );
+
+
+                fecha.textContent =
+                    "Fecha: " +
+                    formatearFecha(
+                        alerta.fecha_reporte
+                    );
+
+
+                /* Descripción */
+
+                const descripcion =
+                    document.createElement(
+                        "p"
+                    );
+
+
+                descripcion.textContent =
+                    "Descripción: " +
+                    (
+                        alerta.descripcion ||
+                        "Sin descripción"
+                    );
+
+
+                /* Estado */
+
+                const estado =
+                    document.createElement(
+                        "p"
+                    );
+
+
+                estado.textContent =
+                    "Estado: " +
+                    (
+                        alerta.estado ||
+                        "Activo"
+                    );
+
+
+                tarjeta.appendChild(
+                    titulo
+                );
+
+                tarjeta.appendChild(
+                    lugar
+                );
+
+                tarjeta.appendChild(
+                    fecha
+                );
+
+                tarjeta.appendChild(
+                    descripcion
+                );
+
+                tarjeta.appendChild(
+                    estado
+                );
+
+
+                contenedorAlertas.appendChild(
+                    tarjeta
+                );
+
+            }
+        );
+
+    }
+
+
+    function pintarMarcadores(alertas) {
+
+        grupoMarcadores.clearLayers();
+
+
+        const coordenadas = [];
+
+
+        alertas.forEach(
+            function (alerta) {
+
+
+                if (
+                    alerta.estado &&
+                    alerta.estado !== "Activo"
+                ) {
+
+                    return;
+
+                }
+
+
+                const latitud =
+                    parseFloat(
+                        alerta.latitud
+                    );
+
+
+                const longitud =
+                    parseFloat(
+                        alerta.longitud
+                    );
+
+
+                if (
+                    isNaN(latitud) ||
+                    isNaN(longitud)
+                ) {
+
+                    return;
+
+                }
+
+
+                const posicion = [
+                    latitud,
+                    longitud
+                ];
+
+
+                coordenadas.push(
+                    posicion
+                );
+
+
+                const marcador =
+                    L.marker(
+                        posicion
+                    ).addTo(
+                        grupoMarcadores
+                    );
+
+
+                const popup = `
+
+                    <div class="popup-alerta">
+
+                        <strong>
+                            ${escaparHTML(
+                                obtenerNombreTipo(
+                                    alerta.tipo
+                                )
+                            )}
+                        </strong>
+
+                        <br><br>
+
+                        <b>Ubicación:</b>
+
+                        ${escaparHTML(
+                            alerta.lugar_referencia ||
+                            "No indicada"
+                        )}
+
+                        <br>
+
+                        <b>Descripción:</b>
+
+                        ${escaparHTML(
+                            alerta.descripcion ||
+                            "Sin descripción"
+                        )}
+
+                        <br>
+
+                        <b>Fecha:</b>
+
+                        ${escaparHTML(
+                            formatearFecha(
+                                alerta.fecha_reporte
+                            )
+                        )}
+
+                    </div>
+
+                `;
+
+
+                marcador.bindPopup(
+                    popup
+                );
+
+            }
+        );
+
+
+        if (
+            coordenadas.length === 1
+        ) {
+
+            mapaAlertas.setView(
+                coordenadas[0],
+                14
+            );
+
+        }
+        else if (
+            coordenadas.length > 1
+        ) {
+
+            mapaAlertas.fitBounds(
+                coordenadas,
+                {
+                    padding: [
+                        40,
+                        40
+                    ]
+                }
+            );
+
+        }
+        else {
+
+            mapaAlertas.setView(
+                [9.9281, -84.0907],
+                8
+            );
+
+        }
+
+    }
 
 
     btnEnviar.addEventListener(
         "click",
-        function () {
+        async function () {
 
 
             validarFormulario();
@@ -835,15 +667,12 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
 
-            let datos = {
-
+            const datos = {
 
                 id_usuario: 1,
 
-
                 tipo:
                     tipoInput.value,
-
 
                 descripcion:
                     "Animal: " +
@@ -851,263 +680,283 @@ document.addEventListener("DOMContentLoaded", function () {
                     ". " +
                     descripcionInput.value.trim(),
 
-
                 latitud:
                     parseFloat(
                         latitudInput.value
                     ),
-
 
                 longitud:
                     parseFloat(
                         longitudInput.value
                     ),
 
-
                 lugar_referencia:
                     ubicacionInput.value.trim(),
-
 
                 estado:
                     "Activo"
 
-
             };
 
 
+            try {
 
-            /* Deshabilitar mientras guarda */
-
-            btnEnviar.disabled = true;
-
-
-            btnEnviar.innerHTML = `
-
-                <i class="fa-solid fa-spinner fa-spin"></i>
-
-                Publicando...
-
-            `;
+                btnEnviar.disabled =
+                    true;
 
 
-            fetch(
-                "api/alerta.php",
-                {
+                btnEnviar.innerHTML = `
+
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+
+                    Publicando...
+
+                `;
 
 
-                    method:
-                        "POST",
+                const respuesta =
+                    await fetch(
+                        API,
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body:
+                                JSON.stringify(
+                                    datos
+                                )
+                        }
+                    );
 
 
-                    headers: {
-
-                        "Content-Type":
-                            "application/json"
-
-                    },
+                const resultado =
+                    await respuesta.json();
 
 
-                    body:
-                        JSON.stringify(
-                            datos
-                        )
+                if (
+                    !respuesta.ok ||
+                    !resultado.ok
+                ) {
 
+                    throw new Error(
+                        resultado.detalle ||
+                        resultado.mensaje ||
+                        "No se pudo publicar el reporte"
+                    );
 
                 }
-            )
 
 
-                .then(
-                    function (respuesta) {
+                mensajeExito.innerText =
+                    "¡Reporte publicado correctamente!";
 
 
-                        return respuesta
-                            .json()
-                            .then(
-                                function (resultado) {
+                mensajeExito.style.color =
+                    "#0F766E";
 
 
-                                    return {
+                limpiarFormulario();
 
-                                        estado:
-                                            respuesta.status,
 
-                                        resultado:
-                                            resultado
+                await cargarAlertas();
 
-                                    };
 
-
-                                }
-                            );
-
-
-                    }
-                )
-
-
-                .then(
-                    function (respuesta) {
-
-
-                        let resultado =
-                            respuesta.resultado;
-
-
-
-                        if (!resultado.ok) {
-
-                            console.log("Respuesta completa del servidor:", resultado);
-
-                            throw new Error(
-                                resultado.detalle ||
-                                resultado.mensaje ||
-                                "No se pudo publicar el reporte"
-                            );
-                        }
-
-
-
-
-                        mensajeExito.innerText =
-                            "¡Reporte publicado correctamente!";
-
-
-                        mensajeExito.style.color =
-                            "#0F766E";
-
-
-
-                        /* =========================================
-                           LIMPIAR FORMULARIO
-                        ========================================= */
-
-
-                        tipoInput.value = "";
-
-
-                        animalInput.value = "";
-
-
-                        ubicacionInput.value = "";
-
-
-                        fechaInput.value = "";
-
-
-                        descripcionInput.value = "";
-
-
-                        latitudInput.value = "";
-
-
-                        longitudInput.value = "";
-
-
-
-                        /* Quitar marcador selección */
-
-                        if (
-                            marcadorSeleccion
-                        ) {
-
-
-                            mapaSeleccion.removeLayer(
-                                marcadorSeleccion
-                            );
-
-
-                            marcadorSeleccion =
-                                null;
-
-
-                        }
-
-
-
-                        /* Centrar nuevamente */
-
-                        mapaSeleccion.setView(
-                            [9.9281, -84.0907],
-                            8
-                        );
-
-
-
-                        cargarAlertas();
-
-
-
-                        setTimeout(
-                            function () {
-
-
-                                mensajeExito.innerText =
-                                    "";
-
-
-                            },
-                            3000
-                        );
-
-
-                    }
-                )
-
-
-                .catch(
-                    function (error) {
-
-
-                        console.log(
-                            error
-                        );
-
-
-                        mensajeExito.innerText =
-                            "Error: " +
-                            error.message;
-
-
-                        mensajeExito.style.color =
-                            "#DC2626";
-
-
-                    }
-                )
-
-
-                .finally(
+                setTimeout(
                     function () {
 
+                        mensajeExito.innerText =
+                            "";
 
-                        btnEnviar.innerHTML = `
-
-                        <i class="fa-solid fa-paper-plane"></i>
-
-                        Publicar Reporte
-
-                    `;
-
-
-                        validarFormulario();
-
-
-                    }
+                    },
+                    3000
                 );
 
+            }
+            catch (error) {
+
+                console.error(
+                    "Error al publicar:",
+                    error
+                );
+
+
+                mensajeExito.innerText =
+                    "Error: " +
+                    error.message;
+
+
+                mensajeExito.style.color =
+                    "#DC2626";
+
+            }
+            finally {
+
+                btnEnviar.innerHTML = `
+
+                    <i class="fa-solid fa-paper-plane"></i>
+
+                    Publicar Reporte
+
+                `;
+
+
+                validarFormulario();
+
+            }
 
         }
     );
 
 
+    function limpiarFormulario() {
+
+        tipoInput.value = "";
+
+        animalInput.value = "";
+
+        ubicacionInput.value = "";
+
+        fechaInput.value = "";
+
+        descripcionInput.value = "";
+
+        latitudInput.value = "";
+
+        longitudInput.value = "";
+
+
+        errorTipo.innerText = "";
+
+        errorAnimal.innerText = "";
+
+        errorUbicacion.innerText = "";
+
+        errorFecha.innerText = "";
+
+        errorDescripcion.innerText = "";
+
+        errorMapa.innerText = "";
+
+
+        if (
+            marcadorSeleccion
+        ) {
+
+            mapaSeleccion.removeLayer(
+                marcadorSeleccion
+            );
+
+
+            marcadorSeleccion =
+                null;
+
+        }
+
+
+        mapaSeleccion.setView(
+            [9.9281, -84.0907],
+            8
+        );
+
+
+        btnEnviar.disabled =
+            true;
+
+    }
+
+
+    function actualizarContador(
+        cantidad
+    ) {
+
+        if (!cantidadAlertas) {
+
+            return;
+
+        }
+
+
+        cantidadAlertas.innerText =
+            cantidad +
+            (
+                cantidad === 1
+                    ? " Reporte"
+                    : " Reportes"
+            );
+
+    }
+
+
+    function obtenerNombreTipo(
+        tipo
+    ) {
+
+        if (
+            tipo === "Perdida"
+        ) {
+
+            return "Animal Perdido";
+
+        }
+
+
+        if (
+            tipo === "Encontrada"
+        ) {
+
+            return "Animal Encontrado";
+
+        }
+
+
+        return tipo || "Reporte";
+
+    }
+
+    function formatearFecha(
+        fecha
+    ) {
+
+        if (!fecha) {
+
+            return "No indicada";
+
+        }
+
+
+        const partes =
+            fecha.split(" ")[0]
+                .split("-");
+
+
+        if (
+            partes.length !== 3
+        ) {
+
+            return fecha;
+
+        }
+
+
+        return (
+            partes[2] +
+            "/" +
+            partes[1] +
+            "/" +
+            partes[0]
+        );
+
+    }
 
     function escaparHTML(
         texto
     ) {
 
-
-        let div =
+        const div =
             document.createElement(
                 "div"
             );
@@ -1119,91 +968,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
         return div.innerHTML;
 
-
     }
+
+
+    setTimeout(
+        function () {
+
+            mapaSeleccion.invalidateSize();
+
+            mapaAlertas.invalidateSize();
+
+        },
+        200
+    );
 
 
 
     cargarAlertas();
-
-
-    // =========================================
-    // CARGAR Y PINTAR MIS ALERTAS (GET real)
-    // =========================================
-
-    async function cargarAlertas() {
-
-        contenedorAlertas.innerHTML = "<p>Cargando...</p>";
-
-        try {
-
-            const respuesta = await fetch(API);
-
-            const resultado = await respuesta.json();
-
-            if (!resultado.ok) {
-
-                contenedorAlertas.innerHTML = "<p>No se pudieron cargar tus alertas.</p>";
-                return;
-
-            }
-
-            pintarAlertas(resultado.datos);
-
-        } catch (error) {
-
-            contenedorAlertas.innerHTML = "<p>No se pudo conectar con el servidor.</p>";
-
-        }
-
-    }
-
-    function pintarAlertas(reportes) {
-
-        contenedorAlertas.innerHTML = "";
-
-        if (reportes.length === 0) {
-
-            contenedorAlertas.innerHTML = "<p>Todavía no has publicado ninguna alerta.</p>";
-            return;
-
-        }
-
-        reportes.forEach(r => {
-
-            let tarjeta = document.createElement("div");
-            tarjeta.className = "alerta";
-
-            let titulo = document.createElement("h3");
-            titulo.textContent = TIPOS_INVERSO[r.tipo] || r.tipo;
-
-            let mascota = document.createElement("p");
-            mascota.textContent = "Animal: " + r.animal;
-
-            let lugar = document.createElement("p");
-            lugar.textContent = "Ubicación: " + (r.lugar_referencia || "");
-
-            let fecha = document.createElement("p");
-            fecha.textContent = "Fecha: " + r.fecha_evento;
-
-            let descripcion = document.createElement("p");
-            descripcion.textContent = "Descripción: " + r.descripcion;
-
-            let estado = document.createElement("span");
-            estado.className = "estadoReporte";
-            estado.textContent = r.estado;
-
-            tarjeta.appendChild(titulo);
-            tarjeta.appendChild(mascota);
-            tarjeta.appendChild(lugar);
-            tarjeta.appendChild(fecha);
-            tarjeta.appendChild(descripcion);
-            tarjeta.appendChild(estado);
-
-            contenedorAlertas.appendChild(tarjeta);
-
-        });
-
-    }
 
 });
