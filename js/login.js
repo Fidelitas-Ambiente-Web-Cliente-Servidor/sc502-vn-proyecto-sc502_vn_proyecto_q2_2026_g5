@@ -1,153 +1,428 @@
 const API = "api/auth.php";
 
-const tabs = document.querySelectorAll(".auth-tab");
-const formLogin = document.getElementById("form-login");
-const formRegistro = document.getElementById("form-registro");
-const mensaje = document.getElementById("mensaje");
+const tabs =
+    document.querySelectorAll(".auth-tab");
+
+const formLogin =
+    document.getElementById("form-login");
+
+const formRegistro =
+    document.getElementById("form-registro");
+
+const mensaje =
+    document.getElementById("mensaje");
 
 
-// =========================================
-// CAMBIAR ENTRE LOGIN Y REGISTRO
-// =========================================
+/* =====================================================
+   CAMBIAR ENTRE LOGIN Y REGISTRO
+===================================================== */
 
-tabs.forEach(tab => {
+tabs.forEach(function (tab) {
 
-    tab.addEventListener("click", () => {
+    tab.addEventListener(
+        "click",
+        function () {
 
-        tabs.forEach(t => t.classList.remove("activo"));
-        tab.classList.add("activo");
+            tabs.forEach(function (t) {
 
-        limpiarMensaje();
+                t.classList.remove(
+                    "activo"
+                );
 
-        if (tab.dataset.tab === "login") {
+            });
 
-            formLogin.classList.remove("oculto");
-            formRegistro.classList.add("oculto");
 
-        } else {
+            tab.classList.add(
+                "activo"
+            );
 
-            formRegistro.classList.remove("oculto");
-            formLogin.classList.add("oculto");
+
+            limpiarMensaje();
+
+
+            if (
+                tab.dataset.tab === "login"
+            ) {
+
+                formLogin.classList.remove(
+                    "oculto"
+                );
+
+                formRegistro.classList.add(
+                    "oculto"
+                );
+
+            }
+            else {
+
+                formRegistro.classList.remove(
+                    "oculto"
+                );
+
+                formLogin.classList.add(
+                    "oculto"
+                );
+
+            }
 
         }
-
-    });
+    );
 
 });
 
 
-// =========================================
-// MENSAJES
-// =========================================
+/* =====================================================
+   MENSAJES
+===================================================== */
 
-function mostrarMensaje(texto, tipo) {
+function mostrarMensaje(
+    texto,
+    tipo
+) {
 
-    mensaje.textContent = texto;
-    mensaje.className = "auth-mensaje " + tipo;
+    mensaje.textContent =
+        texto;
+
+    mensaje.className =
+        "auth-mensaje " +
+        tipo;
 
 }
+
 
 function limpiarMensaje() {
 
-    mensaje.textContent = "";
-    mensaje.className = "auth-mensaje";
+    mensaje.textContent =
+        "";
+
+    mensaje.className =
+        "auth-mensaje";
 
 }
 
 
-// =========================================
-// LOGIN
-// =========================================
+/* =====================================================
+   CONVERTIR RESPUESTA A JSON
+===================================================== */
 
-formLogin.addEventListener("submit", async (evento) => {
+async function obtenerJSON(
+    respuesta
+) {
 
-    evento.preventDefault();
+    const texto =
+        await respuesta.text();
 
-    limpiarMensaje();
 
-    const datos = {
-        correo: document.getElementById("login-correo").value.trim(),
-        contraseña: document.getElementById("login-contraseña").value
-    };
+    console.log(
+        "Respuesta del servidor:",
+        texto
+    );
+
+
+    let resultado;
+
 
     try {
 
-        const respuesta = await fetch(`${API}?accion=login`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(datos)
-        });
+        resultado =
+            JSON.parse(texto);
 
-        const resultado = await respuesta.json();
+    }
+    catch (error) {
 
-        if (!resultado.ok) {
-
-            mostrarMensaje(resultado.mensaje, "error");
-            return;
-
-        }
-
-        mostrarMensaje(resultado.mensaje, "exito");
-
-        setTimeout(() => {
-            window.location.href = "index.html";
-        }, 500);
-
-    } catch (error) {
-
-        mostrarMensaje("No se pudo conectar con el servidor", "error");
+        throw new Error(
+            "El servidor no devolvió JSON válido. Revise la consola."
+        );
 
     }
 
-});
+
+    return resultado;
+
+}
 
 
-// =========================================
-// REGISTRO
-// =========================================
+/* =====================================================
+   LOGIN
+===================================================== */
 
-formRegistro.addEventListener("submit", async (evento) => {
+formLogin.addEventListener(
+    "submit",
+    async function (evento) {
 
-    evento.preventDefault();
+        evento.preventDefault();
 
-    limpiarMensaje();
 
-    const datos = {
-        nombre: document.getElementById("reg-nombre").value.trim(),
-        apellido: document.getElementById("reg-apellido").value.trim(),
-        correo: document.getElementById("reg-correo").value.trim(),
-        telefono: document.getElementById("reg-telefono").value.trim(),
-        canton: document.getElementById("reg-canton").value.trim(),
-        contraseña: document.getElementById("reg-contraseña").value
-    };
+        limpiarMensaje();
 
-    try {
 
-        const respuesta = await fetch(`${API}?accion=registro`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(datos)
-        });
+        const datos = {
 
-        const resultado = await respuesta.json();
+            correo:
+                document
+                    .getElementById(
+                        "login-correo"
+                    )
+                    .value
+                    .trim(),
 
-        if (!resultado.ok) {
+            contraseña:
+                document
+                    .getElementById(
+                        "login-contraseña"
+                    )
+                    .value
 
-            mostrarMensaje(resultado.mensaje, "error");
-            return;
+        };
+
+
+        try {
+
+            const respuesta =
+                await fetch(
+                    API +
+                    "?accion=login",
+                    {
+
+                        method:
+                            "POST",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json"
+
+                        },
+
+                        body:
+                            JSON.stringify(
+                                datos
+                            )
+
+                    }
+                );
+
+
+            const resultado =
+                await obtenerJSON(
+                    respuesta
+                );
+
+
+            console.log(
+                "Resultado login:",
+                resultado
+            );
+
+
+            if (
+                !respuesta.ok ||
+                !resultado.ok
+            ) {
+
+                mostrarMensaje(
+                    resultado.detalle ||
+                    resultado.mensaje ||
+                    "No fue posible iniciar sesión.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            mostrarMensaje(
+                resultado.mensaje ||
+                "Sesión iniciada correctamente.",
+                "exito"
+            );
+
+
+            setTimeout(
+                function () {
+
+                    window.location.href =
+                        "index.html";
+
+                },
+                500
+            );
+
+        }
+        catch (error) {
+
+            console.error(
+                "Error Login:",
+                error
+            );
+
+
+            mostrarMensaje(
+                error.message,
+                "error"
+            );
 
         }
 
-        mostrarMensaje(resultado.mensaje, "exito");
+    }
+);
 
-        setTimeout(() => {
-            window.location.href = "index.html";
-        }, 500);
 
-    } catch (error) {
+/* =====================================================
+   REGISTRO
+===================================================== */
 
-        mostrarMensaje("No se pudo conectar con el servidor", "error");
+formRegistro.addEventListener(
+    "submit",
+    async function (evento) {
+
+        evento.preventDefault();
+
+
+        limpiarMensaje();
+
+
+        const datos = {
+
+            nombre:
+                document
+                    .getElementById(
+                        "reg-nombre"
+                    )
+                    .value
+                    .trim(),
+
+            apellido:
+                document
+                    .getElementById(
+                        "reg-apellido"
+                    )
+                    .value
+                    .trim(),
+
+            correo:
+                document
+                    .getElementById(
+                        "reg-correo"
+                    )
+                    .value
+                    .trim(),
+
+            telefono:
+                document
+                    .getElementById(
+                        "reg-telefono"
+                    )
+                    .value
+                    .trim(),
+
+            canton:
+                document
+                    .getElementById(
+                        "reg-canton"
+                    )
+                    .value
+                    .trim(),
+
+            contraseña:
+                document
+                    .getElementById(
+                        "reg-contraseña"
+                    )
+                    .value
+
+        };
+
+
+        try {
+
+            const respuesta =
+                await fetch(
+                    API +
+                    "?accion=registro",
+                    {
+
+                        method:
+                            "POST",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json"
+
+                        },
+
+                        body:
+                            JSON.stringify(
+                                datos
+                            )
+
+                    }
+                );
+
+
+            const resultado =
+                await obtenerJSON(
+                    respuesta
+                );
+
+
+            console.log(
+                "Resultado registro:",
+                resultado
+            );
+
+
+            if (
+                !respuesta.ok ||
+                !resultado.ok
+            ) {
+
+                mostrarMensaje(
+                    resultado.detalle ||
+                    resultado.mensaje ||
+                    "No fue posible registrar el usuario.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            mostrarMensaje(
+                resultado.mensaje ||
+                "Usuario registrado correctamente.",
+                "exito"
+            );
+
+
+            setTimeout(
+                function () {
+
+                    window.location.href =
+                        "index.html";
+
+                },
+                500
+            );
+
+        }
+        catch (error) {
+
+            console.error(
+                "Error Registro:",
+                error
+            );
+
+
+            mostrarMensaje(
+                error.message,
+                "error"
+            );
+
+        }
 
     }
-
-});
+);

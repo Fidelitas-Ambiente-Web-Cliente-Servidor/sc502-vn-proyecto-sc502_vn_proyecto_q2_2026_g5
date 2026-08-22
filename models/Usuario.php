@@ -12,6 +12,10 @@ class Usuario
     }
 
 
+    // =========================================
+    // OBTENER TODOS LOS USUARIOS
+    // =========================================
+
     public function obtenerTodos()
     {
         $sql = "SELECT
@@ -43,6 +47,10 @@ class Usuario
         return $consulta->fetchAll(PDO::FETCH_ASSOC);
     }
 
+
+    // =========================================
+    // OBTENER USUARIO POR ID
+    // =========================================
 
     public function obtenerPorId($id)
     {
@@ -80,6 +88,142 @@ class Usuario
     }
 
 
+    // =========================================
+    // OBTENER USUARIO POR CORREO
+    // Se utiliza para iniciar sesión
+    // =========================================
+
+    public function obtenerPorCorreo($correo)
+    {
+        $sql = "SELECT
+                    id_usuario,
+                    id_organizacion,
+                    nombre,
+                    apellido,
+                    correo,
+                    contraseña,
+                    telefono,
+                    rol,
+                    canton,
+                    fecha_registro,
+                    estado
+
+                FROM usuarios
+
+                WHERE correo = :correo
+
+                LIMIT 1";
+
+
+        $consulta = $this->conexion->prepare($sql);
+
+
+        $consulta->execute([
+            ':correo' => $correo
+        ]);
+
+
+        return $consulta->fetch(PDO::FETCH_ASSOC);
+    }
+
+
+    // =========================================
+    // COMPROBAR SI EL CORREO YA EXISTE
+    // =========================================
+
+    public function correoExiste($correo)
+    {
+        $sql = "SELECT COUNT(*)
+
+                FROM usuarios
+
+                WHERE correo = :correo";
+
+
+        $consulta = $this->conexion->prepare($sql);
+
+
+        $consulta->execute([
+            ':correo' => $correo
+        ]);
+
+
+        return $consulta->fetchColumn() > 0;
+    }
+
+
+    // =========================================
+    // CREAR USUARIO
+    // =========================================
+
+    public function crear($datos)
+    {
+        $sql = "INSERT INTO usuarios
+                (
+                    id_organizacion,
+                    nombre,
+                    apellido,
+                    correo,
+                    contraseña,
+                    telefono,
+                    rol,
+                    canton,
+                    estado
+                )
+                VALUES
+                (
+                    :id_organizacion,
+                    :nombre,
+                    :apellido,
+                    :correo,
+                    :contrasena,
+                    :telefono,
+                    :rol,
+                    :canton,
+                    :estado
+                )";
+
+
+        $consulta = $this->conexion->prepare($sql);
+
+
+        $consulta->execute([
+            ':id_organizacion' =>
+                $datos['id_organizacion'] ?? null,
+
+            ':nombre' =>
+                $datos['nombre'],
+
+            ':apellido' =>
+                $datos['apellido'],
+
+            ':correo' =>
+                $datos['correo'],
+
+            ':contrasena' =>
+                $datos['contraseña'],
+
+            ':telefono' =>
+                $datos['telefono'] ?? null,
+
+            ':rol' =>
+                $datos['rol'] ?? 'Ciudadano',
+
+            ':canton' =>
+                $datos['canton'] ?? null,
+
+            ':estado' =>
+                $datos['estado'] ?? 1
+        ]);
+
+
+        return $this->conexion->lastInsertId();
+    }
+
+
+    // =========================================
+    // OBTENER USUARIOS DE UNA ORGANIZACIÓN
+    // =========================================
 
     public function obtenerPorOrganizacion($idOrganizacion)
     {
@@ -114,6 +258,9 @@ class Usuario
     }
 
 
+    // =========================================
+    // ASIGNAR ORGANIZACIÓN A UN USUARIO
+    // =========================================
 
     public function asignarOrganizacion(
         $idUsuario,
@@ -137,6 +284,9 @@ class Usuario
     }
 
 
+    // =========================================
+    // QUITAR ORGANIZACIÓN
+    // =========================================
 
     public function quitarOrganizacion($idUsuario)
     {
