@@ -12,130 +12,146 @@ class Usuario
     }
 
 
-    // =========================================
-    // OBTENER USUARIO POR CORREO
-    // =========================================
-
-    public function obtenerPorCorreo($correo)
+    public function obtenerTodos()
     {
         $sql = "SELECT
-                    id_usuario,
-                    id_organizacion,
-                    nombre,
-                    apellido,
-                    correo,
-                    contraseña,
-                    telefono,
-                    rol,
-                    canton,
-                    estado
-                FROM usuarios
-                WHERE correo = :correo";
+                    u.id_usuario,
+                    u.id_organizacion,
+                    u.nombre,
+                    u.apellido,
+                    u.correo,
+                    u.telefono,
+                    u.rol,
+                    u.canton,
+                    u.fecha_registro,
+                    u.estado,
+
+                    o.nombre AS organizacion_nombre
+
+                FROM usuarios u
+
+                LEFT JOIN organizaciones o
+                    ON u.id_organizacion = o.id_organizacion
+
+                ORDER BY u.nombre, u.apellido";
+
 
         $consulta = $this->conexion->prepare($sql);
 
-        $consulta->execute([
-            ':correo' => $correo
-        ]);
+        $consulta->execute();
 
-        return $consulta->fetch(PDO::FETCH_ASSOC);
+        return $consulta->fetchAll(PDO::FETCH_ASSOC);
     }
 
-
-    // =========================================
-    // OBTENER USUARIO POR ID
-    // =========================================
 
     public function obtenerPorId($id)
     {
         $sql = "SELECT
-                    id_usuario,
-                    id_organizacion,
-                    nombre,
-                    apellido,
-                    correo,
-                    telefono,
-                    rol,
-                    canton,
-                    estado
-                FROM usuarios
-                WHERE id_usuario = :id";
+                    u.id_usuario,
+                    u.id_organizacion,
+                    u.nombre,
+                    u.apellido,
+                    u.correo,
+                    u.telefono,
+                    u.rol,
+                    u.canton,
+                    u.fecha_registro,
+                    u.estado,
+
+                    o.nombre AS organizacion_nombre
+
+                FROM usuarios u
+
+                LEFT JOIN organizaciones o
+                    ON u.id_organizacion = o.id_organizacion
+
+                WHERE u.id_usuario = :id";
+
 
         $consulta = $this->conexion->prepare($sql);
+
 
         $consulta->execute([
             ':id' => $id
         ]);
 
+
         return $consulta->fetch(PDO::FETCH_ASSOC);
     }
 
 
-    // =========================================
-    // CREAR USUARIO (REGISTRO)
-    // =========================================
 
-    public function crear($datos)
+    public function obtenerPorOrganizacion($idOrganizacion)
     {
-        $sql = "INSERT INTO usuarios
-                (
+        $sql = "SELECT
+                    id_usuario,
+                    id_organizacion,
                     nombre,
                     apellido,
                     correo,
-                    contraseña,
                     telefono,
                     rol,
-                    canton
-                )
-                VALUES
-                (
-                    :nombre,
-                    :apellido,
-                    :correo,
-                    :contrasena,
-                    :telefono,
-                    :rol,
-                    :canton
-                )";
+                    canton,
+                    fecha_registro,
+                    estado
+
+                FROM usuarios
+
+                WHERE id_organizacion = :id_organizacion
+
+                ORDER BY nombre, apellido";
+
 
         $consulta = $this->conexion->prepare($sql);
 
+
         $consulta->execute([
-            ':nombre' => $datos['nombre'],
-            ':apellido' => $datos['apellido'],
-            ':correo' => $datos['correo'],
-
-            // Ya viene hasheada desde el controller
-            // (el placeholder va sin ñ a propósito: PDO
-            // no soporta bien acentos en nombres de parámetros,
-            // aunque la COLUMNA de la tabla sí se llame "contraseña")
-            ':contrasena' => $datos['contraseña'],
-
-            ':telefono' => $datos['telefono'] ?? null,
-            ':rol' => $datos['rol'] ?? 'Ciudadano',
-            ':canton' => $datos['canton'] ?? null
+            ':id_organizacion' => $idOrganizacion
         ]);
 
-        return $this->conexion->lastInsertId();
+
+        return $consulta->fetchAll(PDO::FETCH_ASSOC);
     }
 
 
-    // =========================================
-    // CORREO YA REGISTRADO
-    // =========================================
 
-    public function correoExiste($correo)
-    {
-        $sql = "SELECT id_usuario
-                FROM usuarios
-                WHERE correo = :correo";
+    public function asignarOrganizacion(
+        $idUsuario,
+        $idOrganizacion
+    ) {
+
+        $sql = "UPDATE usuarios
+
+                SET id_organizacion = :id_organizacion
+
+                WHERE id_usuario = :id_usuario";
+
 
         $consulta = $this->conexion->prepare($sql);
 
-        $consulta->execute([
-            ':correo' => $correo
-        ]);
 
-        return $consulta->fetch(PDO::FETCH_ASSOC) !== false;
+        return $consulta->execute([
+            ':id_usuario' => $idUsuario,
+            ':id_organizacion' => $idOrganizacion
+        ]);
+    }
+
+
+
+    public function quitarOrganizacion($idUsuario)
+    {
+        $sql = "UPDATE usuarios
+
+                SET id_organizacion = NULL
+
+                WHERE id_usuario = :id_usuario";
+
+
+        $consulta = $this->conexion->prepare($sql);
+
+
+        return $consulta->execute([
+            ':id_usuario' => $idUsuario
+        ]);
     }
 }

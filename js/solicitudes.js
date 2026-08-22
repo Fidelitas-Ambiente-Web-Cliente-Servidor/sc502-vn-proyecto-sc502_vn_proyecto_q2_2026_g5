@@ -394,7 +394,6 @@ function obtenerBotones(solicitud) {
 
 
             </div>
-            ` : ""}
 
         `;
     }
