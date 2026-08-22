@@ -4,12 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let animales = [];
     let animalSeleccionadoId = null;
-
-
-    // =========================================
-    // ELEMENTOS
-    // =========================================
-
+    
     const filtroNombre =
         document.getElementById("filtroNombre");
 

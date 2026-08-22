@@ -16,10 +16,6 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("fecha");
 
 
-    // =========================================
-    // TIPOS: texto del <option> -> ENUM de la BD
-    // =========================================
-
     const TIPOS = {
         "Animal Perdido": "Perdida",
         "Animal Encontrado": "Encontrada"
@@ -30,17 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
         "Encontrada": "Animal Encontrado"
     };
 
-
-    // =========================================
-    // CARGAR MIS ALERTAS AL ENTRAR
-    // =========================================
-
     cargarAlertas();
-
-
-    // =========================================
-    // VALIDACIÓN DEL FORMULARIO
-    // =========================================
 
     function validarFormulario() {
     let descripcionInput =
